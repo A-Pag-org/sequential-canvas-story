@@ -34,34 +34,36 @@ export const MetricCard = ({
   return (
     <Card 
       className={cn(
-        "metric-card animate-fade-in-scale",
+        "metric-card animate-card-enter interactive-hover",
         variantClasses[variant],
         className
       )}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="text-sm font-medium opacity-90 mb-2">{title}</h3>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold">{value}</span>
+          <h3 className="text-sm font-medium opacity-90 mb-3">{title}</h3>
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-bold tracking-tight">{value}</span>
             {trend && (
               <span
                 className={cn(
-                  "text-sm font-medium",
-                  trend.isPositive ? "text-green-200" : "text-red-200"
+                  "text-sm font-medium px-2 py-1 rounded-full transition-all duration-300",
+                  trend.isPositive 
+                    ? "text-success-light bg-success/10" 
+                    : "text-danger-light bg-danger/10"
                 )}
               >
-                {trend.isPositive ? "+" : ""}{trend.value}%
+                {trend.isPositive ? "↗" : "↘"} {Math.abs(trend.value)}%
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="text-sm opacity-80 mt-1">{subtitle}</p>
+            <p className="text-sm opacity-80 mt-2 leading-relaxed">{subtitle}</p>
           )}
         </div>
         {Icon && (
-          <div className="p-3 rounded-lg bg-black/10">
-            <Icon className="h-6 w-6" />
+          <div className="p-3 rounded-xl bg-black/10 animate-float">
+            <Icon className="h-7 w-7" />
           </div>
         )}
       </div>

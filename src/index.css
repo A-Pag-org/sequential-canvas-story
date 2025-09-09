@@ -6,76 +6,88 @@
 
 @layer base {
   :root {
-    /* Core Background & Text */
-    --background: 0 0% 98%;
-    --foreground: 220 15% 20%;
+    /* Core Background & Text - Sophisticated neutrals */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 27%;
 
-    /* Card System */
+    /* Card System - Enhanced depth */
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 20%;
+    --card-foreground: 215 25% 27%;
 
     /* Popover System */
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 20%;
+    --popover-foreground: 215 25% 27%;
 
-    /* MoHUA Brand Colors */
-    --primary: 142 76% 36%;           /* MoHUA Green */
+    /* Enhanced MoHUA Brand Colors */
+    --primary: 158 64% 52%;           /* Sophisticated emerald green */
     --primary-foreground: 0 0% 100%;
-    --primary-light: 142 76% 45%;     /* Lighter green for hover */
+    --primary-light: 158 64% 62%;     /* Lighter emerald for hover */
+    --primary-dark: 158 64% 42%;      /* Darker emerald for depth */
     
-    /* Dashboard Status Colors */
-    --success: 142 76% 36%;           /* Issues Resolved - Green */
+    /* Refined Dashboard Status Colors */
+    --success: 142 71% 45%;           /* Forest green - professional success */
+    --success-light: 142 71% 55%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 45 93% 47%;            /* Issues Raised - Bright Yellow */
-    --warning-foreground: 220 15% 20%;
+    --warning: 38 92% 50%;            /* Refined amber - attention without alarm */
+    --warning-light: 38 92% 60%;
+    --warning-foreground: 215 25% 27%;
     
-    --danger: 0 65% 51%;              /* Critical Issues - Red */
+    --danger: 0 72% 51%;              /* Refined red - serious but not harsh */
+    --danger-light: 0 72% 61%;
     --danger-foreground: 0 0% 100%;
     
-    --info: 217 91% 60%;              /* Information - Blue */
+    --info: 201 96% 32%;              /* Deep ocean blue - trustworthy */
+    --info-light: 201 96% 42%;
     --info-foreground: 0 0% 100%;
 
-    /* UI Elements */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 15% 20%;
+    /* Enhanced UI Elements */
+    --secondary: 210 20% 95%;
+    --secondary-foreground: 215 25% 27%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 8% 46%;
+    --muted: 210 20% 94%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 220 14% 96%;
-    --accent-foreground: 220 15% 20%;
+    --accent: 158 30% 93%;            /* Subtle green tint */
+    --accent-foreground: 215 25% 27%;
 
-    --destructive: 0 65% 51%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders & Inputs */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 142 76% 36%;
+    /* Refined Borders & Inputs */
+    --border: 210 20% 89%;
+    --input: 210 20% 89%;
+    --ring: 158 64% 52%;
 
-    /* Chart Colors */
-    --chart-1: 142 76% 36%;           /* Primary Green */
-    --chart-2: 45 93% 47%;            /* Warning Yellow */
-    --chart-3: 217 91% 60%;           /* Info Blue */
-    --chart-4: 0 65% 51%;             /* Danger Red */
-    --chart-5: 262 83% 58%;           /* Purple */
+    /* Enhanced Chart Colors - Better contrast and harmony */
+    --chart-1: 158 64% 52%;           /* Primary Emerald */
+    --chart-2: 38 92% 50%;            /* Refined Amber */
+    --chart-3: 201 96% 32%;           /* Deep Blue */
+    --chart-4: 0 72% 51%;             /* Refined Red */
+    --chart-5: 271 81% 56%;           /* Royal Purple */
+    --chart-6: 24 70% 52%;            /* Warm Orange */
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 45%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 65% 55%));
-    --gradient-warning: linear-gradient(135deg, hsl(45 93% 47%), hsl(45 93% 65%));
-    --gradient-danger: linear-gradient(135deg, hsl(0 65% 51%), hsl(0 65% 65%));
-    --gradient-info: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    /* Sophisticated Multi-stop Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(158 64% 45%) 50%, hsl(158 64% 58%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 38%) 50%, hsl(142 71% 52%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 43%) 50%, hsl(38 92% 57%) 100%);
+    --gradient-danger: linear-gradient(135deg, hsl(0 72% 51%) 0%, hsl(0 72% 44%) 50%, hsl(0 72% 58%) 100%);
+    --gradient-info: linear-gradient(135deg, hsl(201 96% 32%) 0%, hsl(201 96% 25%) 50%, hsl(201 96% 39%) 100%);
     
-    /* Animation Timing */
+    /* Glass morphism and depth gradients */
+    --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.05));
+    --gradient-header: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(158 74% 48%) 50%, hsl(158 54% 56%) 100%);
+
+    /* Enhanced Shadows with color tints */
+    --shadow-sm: 0 1px 2px 0 hsl(158 64% 52% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(158 64% 52% / 0.1), 0 2px 4px -2px hsl(158 64% 52% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(158 64% 52% / 0.1), 0 4px 6px -4px hsl(158 64% 52% / 0.05);
+    --shadow-colored: 0 20px 25px -5px hsl(158 64% 52% / 0.15), 0 10px 10px -5px hsl(158 64% 52% / 0.1);
+    
+    /* Enhanced Animation Timing */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     --radius: 0.5rem;
 
@@ -148,56 +160,109 @@
 /* Dashboard-specific animations and utilities */
 @layer utilities {
   .metric-card {
-    @apply rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105;
+    @apply rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-colored hover:scale-105;
+    backdrop-filter: blur(10px);
   }
 
   .metric-card-warning {
     background: var(--gradient-warning);
-    @apply text-warning-foreground;
+    @apply text-warning-foreground shadow-lg;
+    box-shadow: 0 8px 32px hsl(var(--warning) / 0.2);
   }
 
   .metric-card-success {
     background: var(--gradient-success);
-    @apply text-success-foreground;
+    @apply text-success-foreground shadow-lg;
+    box-shadow: 0 8px 32px hsl(var(--success) / 0.2);
   }
 
   .metric-card-danger {
     background: var(--gradient-danger);
-    @apply text-danger-foreground;
+    @apply text-danger-foreground shadow-lg;
+    box-shadow: 0 8px 32px hsl(var(--danger) / 0.2);
   }
 
   .metric-card-info {
     background: var(--gradient-info);
-    @apply text-info-foreground;
+    @apply text-info-foreground shadow-lg;
+    box-shadow: 0 8px 32px hsl(var(--info) / 0.2);
   }
 
   .nav-button {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105;
+    backdrop-filter: blur(10px);
   }
 
   .nav-button-active {
-    @apply bg-primary text-primary-foreground shadow-md;
+    @apply bg-white/20 text-white shadow-lg;
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.3);
   }
 
   .nav-button-inactive {
-    @apply bg-secondary text-secondary-foreground hover:bg-primary/10;
+    @apply text-white/80 hover:text-white hover:bg-white/10;
+    transition: var(--transition-spring);
   }
 
   .dashboard-header {
-    background: var(--gradient-primary);
-    @apply text-primary-foreground shadow-lg;
+    background: var(--gradient-header);
+    @apply text-primary-foreground;
+    box-shadow: 0 8px 32px hsl(var(--primary) / 0.15);
   }
 
   .chart-container {
-    @apply bg-card rounded-xl p-6 shadow-md border border-border;
+    @apply bg-card rounded-xl p-6 border border-border;
+    box-shadow: 0 4px 24px hsl(var(--primary) / 0.08);
+    transition: var(--transition-smooth);
+  }
+
+  .chart-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px hsl(var(--primary) / 0.12);
   }
 
   .data-table {
-    @apply w-full bg-card rounded-xl shadow-md border border-border overflow-hidden;
+    @apply w-full bg-card rounded-xl border border-border overflow-hidden;
+    box-shadow: 0 4px 24px hsl(var(--primary) / 0.08);
   }
 
   .pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Enhanced interactive states */
+  .interactive-hover {
+    @apply transition-all duration-300 hover:scale-105;
+    transition: var(--transition-spring);
+  }
+
+  .interactive-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-colored);
+  }
+
+  /* Glass morphism effect */
+  .glass-morphism {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--border) / 0.2);
+  }
+
+  /* Subtle animation for cards entering view */
+  .animate-card-enter {
+    animation: card-enter 0.6s ease-out forwards;
+  }
+
+  /* Enhanced button variants */
+  .btn-gradient-primary {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground font-medium px-6 py-3 rounded-lg;
+    box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
+    transition: var(--transition-smooth);
+  }
+
+  .btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px hsl(var(--primary) / 0.4);
   }
 }
 
@@ -213,7 +278,7 @@
 @keyframes slide-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -229,5 +294,20 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes card-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

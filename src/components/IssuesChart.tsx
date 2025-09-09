@@ -43,35 +43,41 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
 
   if (type === "composed") {
     return (
-      <Card className="chart-container animate-slide-in-up">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-        </CardHeader>
+    <Card className="chart-container animate-card-enter">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
+      </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
             <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.6} />
               <XAxis 
                 dataKey="name" 
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
+                fontWeight={500}
               />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+              <YAxis 
+                stroke="hsl(var(--muted-foreground))" 
+                fontSize={12}
+                fontWeight={500}
+              />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Bar
                 dataKey="raised"
                 name="Issues Raised"
                 fill="hsl(var(--chart-2))"
-                radius={[4, 4, 0, 0]}
+                radius={[6, 6, 0, 0]}
               />
               <Line
                 type="monotone"
                 dataKey="resolved"
                 name="Issues Resolved"
                 stroke="hsl(var(--chart-3))"
-                strokeWidth={3}
-                dot={{ fill: "hsl(var(--chart-3))", strokeWidth: 2, r: 6 }}
+                strokeWidth={4}
+                dot={{ fill: "hsl(var(--chart-3))", strokeWidth: 3, r: 8 }}
+                activeDot={{ r: 10, stroke: "hsl(var(--chart-3))", strokeWidth: 2 }}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -81,33 +87,39 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
   }
 
   return (
-    <Card className="chart-container animate-slide-in-up">
+    <Card className="chart-container animate-card-enter">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
           <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.6} />
             <XAxis 
               dataKey="name" 
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
+              fontWeight={500}
             />
-            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+            <YAxis 
+              stroke="hsl(var(--muted-foreground))" 
+              fontSize={12}
+              fontWeight={500}
+            />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Bar
               dataKey="target"
               name="Target"
               fill="hsl(var(--chart-3))"
-              radius={[4, 4, 0, 0]}
+              radius={[6, 6, 0, 0]}
+              opacity={0.8}
             />
             <Bar
               dataKey="raised"
               name="Actual"
               fill="hsl(var(--chart-2))"
-              radius={[4, 4, 0, 0]}
+              radius={[6, 6, 0, 0]}
             />
           </ComposedChart>
         </ResponsiveContainer>

@@ -48,30 +48,35 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        /* Dashboard Status Colors */
+        /* Enhanced Dashboard Status Colors */
         success: {
           DEFAULT: "hsl(var(--success))",
+          light: "hsl(var(--success-light))",
           foreground: "hsl(var(--success-foreground))",
         },
         warning: {
           DEFAULT: "hsl(var(--warning))",
+          light: "hsl(var(--warning-light))",
           foreground: "hsl(var(--warning-foreground))",
         },
         danger: {
           DEFAULT: "hsl(var(--danger))",
+          light: "hsl(var(--danger-light))",
           foreground: "hsl(var(--danger-foreground))",
         },
         info: {
           DEFAULT: "hsl(var(--info))",
+          light: "hsl(var(--info-light))",
           foreground: "hsl(var(--info-foreground))",
         },
-        /* Chart Colors */
+        /* Enhanced Chart Colors */
         chart: {
           "1": "hsl(var(--chart-1))",
           "2": "hsl(var(--chart-2))",
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
+          "6": "hsl(var(--chart-6))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -134,6 +139,28 @@ export default {
             boxShadow: "0 0 30px hsl(var(--primary) / 0.6)",
           },
         },
+        "card-enter": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px) scale(0.95)",
+          },
+          "60%": {
+            opacity: "0.8",
+            transform: "translateY(-5px) scale(1.02)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
+          },
+        },
+        "float": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -141,6 +168,8 @@ export default {
         "slide-in-up": "slide-in-up 0.4s ease-out",
         "fade-in-scale": "fade-in-scale 0.3s ease-out",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "card-enter": "card-enter 0.6s ease-out forwards",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },

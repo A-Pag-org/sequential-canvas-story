@@ -31,9 +31,17 @@ export const DashboardHeader = ({
     <header className="dashboard-header">
       <div className="container mx-auto px-6">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between py-4 border-b border-white/20">
-          <h1 className="text-2xl font-bold">MoHUA Dashboard</h1>
-          <div className="flex gap-2">
+        <div className="flex items-center justify-between py-6 border-b border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">MoHUA Dashboard</h1>
+              <p className="text-sm text-white/80">Ministry of Housing and Urban Affairs</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
             {modules.map((module) => (
               <Button
                 key={module.id}
@@ -41,10 +49,10 @@ export const DashboardHeader = ({
                 size="sm"
                 onClick={() => onModuleChange(module.id)}
                 className={cn(
-                  "nav-button",
+                  "nav-button transition-all duration-300",
                   activeModule === module.id
-                    ? "bg-white/20 text-white"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? "nav-button-active"
+                    : "nav-button-inactive"
                 )}
               >
                 {module.label}
@@ -54,7 +62,7 @@ export const DashboardHeader = ({
         </div>
 
         {/* Secondary Navigation */}
-        <div className="flex gap-2 py-4">
+        <div className="flex gap-3 py-4">
           {sections.map((section) => (
             <Button
               key={section.id}
@@ -62,13 +70,16 @@ export const DashboardHeader = ({
               size="sm"
               onClick={() => onSectionChange(section.id)}
               className={cn(
-                "nav-button",
+                "nav-button transition-all duration-300 relative",
                 activeSection === section.id
-                  ? "bg-white/20 text-white"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
+                  ? "nav-button-active"
+                  : "nav-button-inactive"
               )}
             >
               {section.label}
+              {activeSection === section.id && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/60 rounded-full" />
+              )}
             </Button>
           ))}
         </div>

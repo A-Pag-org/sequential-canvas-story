@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface TableColumn {
   key: string;
@@ -52,19 +53,19 @@ export const DataTable = ({
   };
 
   return (
-    <Card className="data-table animate-slide-in-up">
+    <Card className="data-table animate-card-enter">
       {title && (
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+        <CardHeader className="border-b border-border bg-muted/30">
+          <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
         </CardHeader>
       )}
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted/50">
+            <TableRow className="bg-muted/50 hover:bg-muted/60 transition-colors">
               {expandable && <TableHead className="w-12"></TableHead>}
               {columns.map((column) => (
-                <TableHead key={column.key} className="font-semibold">
+                <TableHead key={column.key} className="font-semibold text-foreground">
                   {column.label}
                 </TableHead>
               ))}
@@ -78,9 +79,12 @@ export const DataTable = ({
               return (
                 <TableRow
                   key={rowId}
-                  className={`hover:bg-muted/50 transition-colors cursor-pointer ${
-                    isExpanded ? "bg-muted/30" : ""
-                  }`}
+                  className={cn(
+                    "hover:bg-muted/50 transition-all duration-300 cursor-pointer border-b border-border/50",
+                    isExpanded ? "bg-muted/30 shadow-sm" : "",
+                    "animate-slide-in-up"
+                  )}
+                  style={{ animationDelay: `${index * 50}ms` }}
                   onClick={() => expandable && toggleRow(rowId)}
                 >
                   {expandable && (
@@ -88,18 +92,18 @@ export const DataTable = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0"
+                        className="h-8 w-8 p-0 hover:bg-primary/10 transition-colors"
                       >
                         {isExpanded ? (
-                          <ChevronDown className="h-4 w-4" />
+                          <ChevronDown className="h-4 w-4 text-primary" />
                         ) : (
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
                         )}
                       </Button>
                     </TableCell>
                   )}
                   {columns.map((column) => (
-                    <TableCell key={column.key}>
+                    <TableCell key={column.key} className="font-medium">
                       {column.render ? (
                         column.render(row[column.key], row)
                       ) : column.key === "agency" && row[column.key] ? (
@@ -108,10 +112,10 @@ export const DataTable = ({
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
+                            className="h-6 w-6 p-0 opacity-60 hover:opacity-100 hover:bg-info/10 transition-all duration-200"
                             onClick={(e) => handleEyeClick(rowId, e)}
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-4 w-4 text-info" />
                           </Button>
                         </div>
                       ) : (
