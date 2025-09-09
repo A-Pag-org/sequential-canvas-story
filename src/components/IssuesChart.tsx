@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChartDataPoint {
   name: string;
@@ -70,8 +71,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={isMobile ? 260 : 400}>
-            <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
+          <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 28 : 24) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
               <XAxis 
                 dataKey="name" 
@@ -79,13 +80,15 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
                 fontSize={12}
                 fontWeight={500}
               />
-              <YAxis 
-                stroke="hsl(var(--muted-foreground))" 
+              <YAxis
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 fontWeight={500}
+                domain={[0, 'dataMax + 10']}
+                tickCount={6}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend />
+              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
               <Bar
                 dataKey="raised"
                 name="Issues Raised"
@@ -119,8 +122,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={isMobile ? 260 : 400}>
-          <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
+        <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+          <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 28 : 24) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis 
               dataKey="name" 
@@ -128,13 +131,15 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
               fontSize={12}
               fontWeight={500}
             />
-            <YAxis 
-              stroke="hsl(var(--muted-foreground))" 
-              fontSize={12}
-              fontWeight={500}
-            />
+            <YAxis
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+                fontWeight={500}
+                domain={[0, 'dataMax + 10']}
+                tickCount={6}
+              />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
             <Bar
               dataKey="target"
               name="Target"
