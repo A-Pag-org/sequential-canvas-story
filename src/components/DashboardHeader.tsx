@@ -33,12 +33,9 @@ export const DashboardHeader = ({
         {/* Top Navigation */}
         <div className="flex items-center justify-between py-6 border-b border-white/20">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-              <span className="text-white font-bold text-lg">M</span>
-            </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight">MoHUA Dashboard</h1>
-              <p className="text-sm text-white/80">Ministry of Housing and Urban Affairs</p>
+              <p className="text-sm text-white/85">Ministry of Housing and Urban Affairs</p>
             </div>
           </div>
           <div className="flex gap-3">
@@ -48,6 +45,7 @@ export const DashboardHeader = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onModuleChange(module.id)}
+                aria-pressed={activeModule === module.id}
                 className={cn(
                   "nav-button transition-all duration-300",
                   activeModule === module.id
@@ -69,6 +67,7 @@ export const DashboardHeader = ({
               variant="ghost"
               size="sm"
               onClick={() => onSectionChange(section.id)}
+              aria-current={activeSection === section.id ? "page" : undefined}
               className={cn(
                 "nav-button transition-all duration-300 relative",
                 activeSection === section.id

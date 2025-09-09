@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -41,6 +42,25 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
     return null;
   };
 
+  const BarValueLabel = (props: any) => {
+    const { x, y, width, value } = props;
+    if (value == null) return null;
+    const posX = (x || 0) + (width || 0) / 2;
+    const posY = (y || 0) - 8;
+    return (
+      <text
+        x={posX}
+        y={posY}
+        textAnchor="middle"
+        fontSize={12}
+        fontWeight={600}
+        fill="hsl(var(--foreground))"
+      >
+        {Number(value).toLocaleString()}
+      </text>
+    );
+  };
+
   if (type === "composed") {
     return (
     <Card className="chart-container animate-card-enter">
@@ -49,8 +69,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
       </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
-            <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.6} />
+            <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
               <XAxis 
                 dataKey="name" 
                 stroke="hsl(var(--muted-foreground))"
@@ -69,7 +89,10 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
                 name="Issues Raised"
                 fill="hsl(var(--chart-2))"
                 radius={[6, 6, 0, 0]}
-              />
+                barSize={28}
+              >
+                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+              </Bar>
               <Line
                 type="monotone"
                 dataKey="resolved"
@@ -93,8 +116,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.6} />
+          <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis 
               dataKey="name" 
               stroke="hsl(var(--muted-foreground))"
@@ -114,13 +137,19 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
               fill="hsl(var(--chart-3))"
               radius={[6, 6, 0, 0]}
               opacity={0.8}
-            />
+              barSize={28}
+            >
+              <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
+            </Bar>
             <Bar
               dataKey="raised"
               name="Actual"
               fill="hsl(var(--chart-2))"
               radius={[6, 6, 0, 0]}
-            />
+              barSize={28}
+            >
+              <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+            </Bar>
           </ComposedChart>
         </ResponsiveContainer>
       </CardContent>

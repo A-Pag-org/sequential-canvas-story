@@ -43,16 +43,16 @@ const performanceTableData = [
 
 const Performance = () => {
   const performanceColumns = [
-    { 
-      key: "srNo", 
-      label: "Sr.No.", 
+    {
+      key: "srNo",
+      label: "Sr.No.",
       render: (_: any, row: any) => (performanceTableData.findIndex(item => item.id === row.id) + 1)
     },
     { key: "issueType", label: "Issue Type" },
     { key: "city", label: "City" },
     { key: "agency", label: "Agency" },
-    { 
-      key: "turnAroundTime", 
+    {
+      key: "turnAroundTime",
       label: "Turn Around Time",
       render: (value: string) => (
         <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-sm font-medium">
@@ -90,7 +90,7 @@ const Performance = () => {
       </div>
 
       {/* Performance Analysis */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
         <MetricCard
           title="Best Performing Agency"
           value="Transport Authority"
@@ -103,16 +103,10 @@ const Performance = () => {
           trend={{ value: 12, isPositive: true }}
         />
         <MetricCard
-          title="Issues Over 5 Days"  
+          title="Issues Over 5 Days"
           value="18%"
           variant="warning"
           trend={{ value: -5, isPositive: false }}
-        />
-        <MetricCard
-          title="SLA Compliance"
-          value="82%"
-          variant="success"
-          trend={{ value: 7, isPositive: true }}
         />
       </div>
 
@@ -121,10 +115,7 @@ const Performance = () => {
         title="Issue Resolution Performance Details"
         columns={performanceColumns}
         data={performanceTableData}
-        expandable={true}
-        onRowExpand={(rowId) => {
-          console.log(`Expanded performance details for row ${rowId}`);
-        }}
+        eyeInCity={true}
       />
 
       {/* Additional Insights */}

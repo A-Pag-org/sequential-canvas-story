@@ -1,6 +1,6 @@
 import { MetricCard } from "@/components/MetricCard";
 import { IssuesChart } from "@/components/IssuesChart";
-import { TrendingUp, TrendingDown, Target, CheckCircle } from "lucide-react";
+import { TrendingUp, CheckCircle } from "lucide-react";
 
 // Sample data based on the dashboard images
 const cityData = [
@@ -40,35 +40,6 @@ const Home = () => {
         type="bar"
       />
 
-      {/* Additional Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Active Cities"
-          value="4"
-          icon={Target}
-          variant="info"
-        />
-        <MetricCard
-          title="Resolution Rate"
-          value="78.8%"
-          icon={CheckCircle}
-          variant="success"
-          trend={{ value: 5, isPositive: true }}
-        />
-        <MetricCard
-          title="Pending Issues"
-          value="265"
-          icon={TrendingDown}
-          variant="danger"
-          trend={{ value: -3, isPositive: false }}
-        />
-        <MetricCard
-          title="Avg Resolution Time"
-          value="4.2 days"
-          icon={Target}
-          variant="info"
-        />
-      </div>
     </div>
   );
 };
