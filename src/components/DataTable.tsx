@@ -24,14 +24,18 @@ interface DataTableProps {
   data: any[];
   expandable?: boolean;
   onRowExpand?: (rowId: string | number) => void;
+  renderExpanded?: (row: any) => React.ReactNode;
+  eyeInCity?: boolean;
 }
 
-export const DataTable = ({ 
-  title, 
-  columns, 
-  data, 
+export const DataTable = ({
+  title,
+  columns,
+  data,
   expandable = false,
-  onRowExpand 
+  onRowExpand,
+  renderExpanded,
+  eyeInCity = false,
 }: DataTableProps) => {
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
 
@@ -48,8 +52,7 @@ export const DataTable = ({
 
   const handleEyeClick = (rowId: string | number, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Show additional data for this row
-    console.log(`Viewing details for row ${rowId}`);
+    toggleRow(rowId);
   };
 
   return (
@@ -63,7 +66,7 @@ export const DataTable = ({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50 hover:bg-muted/60 transition-colors">
-              {expandable && <TableHead className="w-12"></TableHead>}
+              {expandable && !eyeInCity && <TableHead className="w-12"></TableHead>}
               {columns.map((column) => (
                 <TableHead key={column.key} className="font-semibold text-foreground">
                   {column.label}
@@ -77,53 +80,65 @@ export const DataTable = ({
               const isExpanded = expandedRows.has(rowId);
               
               return (
-                <TableRow
-                  key={rowId}
-                  className={cn(
-                    "hover:bg-muted/50 transition-all duration-300 cursor-pointer border-b border-border/50",
-                    isExpanded ? "bg-muted/30 shadow-sm" : "",
-                    "animate-slide-in-up"
-                  )}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  onClick={() => expandable && toggleRow(rowId)}
-                >
-                  {expandable && (
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 hover:bg-primary/10 transition-colors"
-                      >
-                        {isExpanded ? (
-                          <ChevronDown className="h-4 w-4 text-primary" />
+                <>
+                  <TableRow
+                    key={rowId}
+                    className={cn(
+                      "hover:bg-muted/50 transition-all duration-300 border-b border-border/50",
+                      isExpanded ? "bg-muted/30 shadow-sm" : "",
+                      eyeInCity ? "cursor-default" : "cursor-pointer",
+                      "animate-slide-in-up"
+                    )}
+                    style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => expandable && !eyeInCity && toggleRow(rowId)}
+                  >
+                    {expandable && !eyeInCity && (
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:bg-primary/10 transition-colors"
+                        >
+                          {isExpanded ? (
+                            <ChevronDown className="h-4 w-4 text-primary" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </Button>
+                      </TableCell>
+                    )}
+                    {columns.map((column) => (
+                      <TableCell key={column.key} className="font-medium">
+                        {column.render ? (
+                          column.render(row[column.key], row)
+                        ) : eyeInCity && column.key === "city" ? (
+                          <div className="flex items-center gap-2">
+                            <span>{row[column.key] || "-"}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              aria-expanded={isExpanded}
+                              aria-label={isExpanded ? "Hide details" : "Show details"}
+                              className="h-6 w-6 p-0 opacity-80 hover:opacity-100 hover:bg-info/10 transition-all duration-200"
+                              onClick={(e) => handleEyeClick(rowId, e)}
+                            >
+                              <Eye className={cn("h-4 w-4", isExpanded ? "text-info" : "text-muted-foreground")} />
+                            </Button>
+                          </div>
                         ) : (
-                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          <span>{row[column.key] || "-"}</span>
                         )}
-                      </Button>
-                    </TableCell>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {expandable && isExpanded && renderExpanded && (
+                    <TableRow className="bg-muted/40 border-b border-border/50">
+                      <TableCell colSpan={columns.length + (expandable && !eyeInCity ? 1 : 0)}>
+                        {renderExpanded(row)}
+                      </TableCell>
+                    </TableRow>
                   )}
-                  {columns.map((column) => (
-                    <TableCell key={column.key} className="font-medium">
-                      {column.render ? (
-                        column.render(row[column.key], row)
-                      ) : column.key === "agency" && row[column.key] ? (
-                        <div className="flex items-center gap-2">
-                          <span>{row[column.key]}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0 opacity-60 hover:opacity-100 hover:bg-info/10 transition-all duration-200"
-                            onClick={(e) => handleEyeClick(rowId, e)}
-                          >
-                            <Eye className="h-4 w-4 text-info" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <span>{row[column.key] || "-"}</span>
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                </>
               );
             })}
           </TableBody>
