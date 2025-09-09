@@ -160,8 +160,12 @@
 /* Dashboard-specific animations and utilities */
 @layer utilities {
   .metric-card {
-    @apply rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-colored hover:scale-105;
+    @apply rounded-xl p-6 shadow-lg transition-all duration-300 hover:scale-105;
     backdrop-filter: blur(10px);
+  }
+
+  .metric-card:hover {
+    box-shadow: var(--shadow-colored);
   }
 
   .metric-card-warning {
