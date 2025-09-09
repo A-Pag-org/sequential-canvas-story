@@ -50,6 +50,16 @@ const Performance = () => {
     },
     { key: "issueType", label: "Issue Type" },
     { key: "city", label: "City" },
+    { key: "agency", label: "Agency" },
+    {
+      key: "turnAroundTime",
+      label: "Turn Around Time",
+      render: (value: string) => (
+        <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-sm font-medium">
+          {value}
+        </span>
+      )
+    },
   ];
 
   return (
@@ -111,20 +121,7 @@ const Performance = () => {
         title="Issue Resolution Performance Details"
         columns={performanceColumns}
         data={performanceTableData}
-        expandable={true}
         eyeInCity={true}
-        renderExpanded={(row) => (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-3">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Agency:</span>
-              <span className="font-medium">{row.agency}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Turn Around Time:</span>
-              <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-sm font-medium">{row.turnAroundTime}</span>
-            </div>
-          </div>
-        )}
       />
 
       {/* Additional Insights */}
