@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React, { useState } from "react";
 import { Eye, ChevronDown, ChevronRight } from "lucide-react";
 import {
   Table,
@@ -80,7 +81,7 @@ export const DataTable = ({
               const isExpanded = expandedRows.has(rowId);
               
               return (
-                <>
+                <React.Fragment key={rowId}>
                   <TableRow
                     key={rowId}
                     className={cn(
@@ -139,7 +140,7 @@ export const DataTable = ({
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </TableBody>
