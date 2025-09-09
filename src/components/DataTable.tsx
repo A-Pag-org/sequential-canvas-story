@@ -108,30 +108,31 @@ export const DataTable = ({
                       </TableCell>
                     )}
                     {columns.map((column) => (
-                      <TableCell key={column.key} className="font-medium">
-                        {column.render ? (
-                          column.render(row[column.key], row)
-                        ) : eyeInCity && column.key === "city" ? (
-                          <div className="flex items-center gap-2">
-                            <span>{row[column.key] || "-"}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              aria-expanded={isExpanded}
-                              aria-label={isExpanded ? "Hide details" : "Show details"}
-                              className="h-6 w-6 p-0 opacity-80 hover:opacity-100 hover:bg-info/10 transition-all duration-200"
-                              onClick={(e) => handleEyeClick(rowId, e)}
-                            >
-                              <Eye className={cn("h-4 w-4", isExpanded ? "text-info" : "text-muted-foreground")} />
-                            </Button>
-                          </div>
-                        ) : (
+                    <TableCell key={column.key} className="font-medium">
+                      {eyeInCity && column.key === "city" ? (
+                        <div className="flex items-center gap-2">
                           <span>{row[column.key] || "-"}</span>
-                        )}
-                      </TableCell>
-                    ))}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            aria-expanded={isExpanded}
+                            aria-label={isExpanded ? "Hide details" : "Show details"}
+                            className="h-6 w-6 p-0 opacity-80 hover:opacity-100 hover:bg-info/10 transition-all duration-200"
+                            onClick={(e) => handleEyeClick(rowId, e)}
+                          >
+                            <Eye className={cn("h-4 w-4", isExpanded ? "text-info" : "text-muted-foreground")} />
+                          </Button>
+                        </div>
+                      ) : (
+                        // For other cells, optionally gate content until expanded when using eyeInCity
+                        (eyeInCity && (column.key === "agency" || column.key === "turnAroundTime") && !isExpanded)
+                          ? <span>-</span>
+                          : (column.render ? column.render(row[column.key], row) : <span>{row[column.key] || "-"}</span>)
+                      )}
+                    </TableCell>
+                  ))}
                   </TableRow>
-                  {expandable && isExpanded && renderExpanded && (
+                  {expandable && !eyeInCity && isExpanded && renderExpanded && (
                     <TableRow className="bg-muted/40 border-b border-border/50">
                       <TableCell colSpan={columns.length + (expandable && !eyeInCity ? 1 : 0)}>
                         {renderExpanded(row)}
