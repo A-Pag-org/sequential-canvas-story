@@ -193,17 +193,17 @@
   }
 
   .nav-button {
-    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent;
     backdrop-filter: blur(10px);
   }
 
   .nav-button-active {
-    @apply bg-white/20 text-white shadow-lg;
+    @apply bg-white/25 text-white shadow-lg border border-white/20;
     box-shadow: 0 4px 20px hsl(var(--primary) / 0.3);
   }
 
   .nav-button-inactive {
-    @apply text-white/80 hover:text-white hover:bg-white/10;
+    @apply text-white/85 bg-white/5 hover:text-white hover:bg-white/10 border border-white/10;
     transition: var(--transition-spring);
   }
 
