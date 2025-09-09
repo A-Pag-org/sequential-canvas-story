@@ -11,6 +11,7 @@ import {
   LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChartDataPoint {
   name: string;
@@ -26,6 +27,7 @@ interface IssuesChartProps {
 }
 
 export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => {
+  const isMobile = useIsMobile();
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -68,7 +70,7 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height={isMobile ? 260 : 400}>
             <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
               <XAxis 
@@ -89,7 +91,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
                 name="Issues Raised"
                 fill="hsl(var(--chart-2))"
                 radius={[6, 6, 0, 0]}
-                barSize={28}
+                barSize={isMobile ? 20 : 28}
+                isAnimationActive={!isMobile}
               >
                 <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>
@@ -101,6 +104,7 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
                 strokeWidth={4}
                 dot={{ fill: "hsl(var(--chart-3))", strokeWidth: 3, r: 8 }}
                 activeDot={{ r: 10, stroke: "hsl(var(--chart-3))", strokeWidth: 2 }}
+                isAnimationActive={!isMobile}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -115,7 +119,7 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={isMobile ? 260 : 400}>
           <ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis 
@@ -137,7 +141,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
               fill="hsl(var(--chart-3))"
               radius={[6, 6, 0, 0]}
               opacity={0.8}
-              barSize={28}
+              barSize={isMobile ? 20 : 28}
+                isAnimationActive={!isMobile}
             >
               <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
             </Bar>
@@ -146,7 +151,8 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
               name="Actual"
               fill="hsl(var(--chart-2))"
               radius={[6, 6, 0, 0]}
-              barSize={28}
+              barSize={isMobile ? 20 : 28}
+                isAnimationActive={!isMobile}
             >
               <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
             </Bar>
