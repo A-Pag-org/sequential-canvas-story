@@ -135,17 +135,6 @@ const Performance = () => {
       headerClassName: "w-44",
       cellClassName: "w-44",
     },
-    {
-      key: "turnAroundTime",
-      label: "Turn Around Time",
-      headerClassName: "w-40",
-      cellClassName: "w-40",
-      render: (value: string) => (
-        <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-sm font-medium">
-          {value}
-        </span>
-      )
-    },
     { key: "fastestCity", label: "Fastest City", headerClassName: "w-40", cellClassName: "w-40" },
     { key: "slowestCity", label: "Slowest City", headerClassName: "w-40", cellClassName: "w-40" },
     { key: "avgTimeTaken", label: "Avg. Time Taken", headerClassName: "w-44", cellClassName: "w-44" },
