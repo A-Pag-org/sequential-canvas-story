@@ -29,12 +29,45 @@ const cityData = {
   }
 };
 
-const agencyTableData = [
-  { id: 1, agency: "Municipal Corporation", issuesRaised: 456, issueResolved: 398 },
-  { id: 2, agency: "Public Works Department", issuesRaised: 234, issueResolved: 189 },
-  { id: 3, agency: "Water Supply Board", issuesRaised: 189, issueResolved: 156 },
-  { id: 4, agency: "Transport Authority", issuesRaised: 145, issueResolved: 132 },
-];
+type AgencyRow = { id: number; agency: string; issuesRaised: number; issueResolved: number };
+
+const agenciesByCity: Record<string, AgencyRow[]> = {
+  Delhi: [
+    { id: 1, agency: "CPWD", issuesRaised: 820, issueResolved: 710 },
+    { id: 2, agency: "DDA", issuesRaised: 640, issueResolved: 522 },
+    { id: 3, agency: "DJB", issuesRaised: 580, issueResolved: 498 },
+    { id: 4, agency: "DMRC", issuesRaised: 310, issueResolved: 274 },
+    { id: 5, agency: "DSIIDC", issuesRaised: 260, issueResolved: 221 },
+    { id: 6, agency: "DUSIB", issuesRaised: 205, issueResolved: 168 },
+    { id: 7, agency: "I & FC", issuesRaised: 180, issueResolved: 151 },
+    { id: 8, agency: "MCD", issuesRaised: 940, issueResolved: 812 },
+    { id: 9, agency: "NCRTC", issuesRaised: 120, issueResolved: 102 },
+    { id: 10, agency: "NHAI", issuesRaised: 150, issueResolved: 129 },
+    { id: 11, agency: "PWD", issuesRaised: 770, issueResolved: 655 },
+    { id: 12, agency: "Railways", issuesRaised: 210, issueResolved: 174 },
+  ],
+  Faridabad: [
+    { id: 1, agency: "FMC", issuesRaised: 430, issueResolved: 362 },
+  ],
+  Ghaziabad: [
+    { id: 1, agency: "GMC", issuesRaised: 520, issueResolved: 441 },
+  ],
+  "Greater Noida": [
+    { id: 1, agency: "GNIDA", issuesRaised: 315, issueResolved: 268 },
+  ],
+  Gurgaon: [
+    { id: 1, agency: "GMC", issuesRaised: 580, issueResolved: 476 },
+  ],
+  Manesar: [
+    { id: 1, agency: "-", issuesRaised: 0, issueResolved: 0 },
+  ],
+  Noida: [
+    { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
+  ],
+  Bahadurghar: [
+    { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
+  ],
+};
 
 const CityWise = ({ selectedCity }: CityWiseProps) => {
   // Process data for the chart
@@ -43,11 +76,13 @@ const CityWise = ({ selectedCity }: CityWiseProps) => {
     resolved: cityData.Delhi.resolved[index] || 0,
   }));
 
+  const agencyTableData: AgencyRow[] = agenciesByCity[selectedCity] || [];
+
   const agencyColumns = [
-    { 
-      key: "srNo", 
-      label: "Sr.No.", 
-      render: (_: any, row: any, index?: number) => (agencyTableData.findIndex(item => item.id === row.id) + 1)
+    {
+      key: "srNo",
+      label: "Sr.No.",
+      render: (_: any, row: any) => (agencyTableData.findIndex(item => item.id === row.id) + 1)
     },
     { key: "agency", label: "Agency" },
     { key: "issuesRaised", label: "Issues Raised", render: (value: number) => value.toLocaleString() },
