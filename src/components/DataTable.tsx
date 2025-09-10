@@ -16,6 +16,8 @@ interface TableColumn {
   key: string;
   label: string;
   render?: (value: any, row: any) => React.ReactNode;
+  headerClassName?: string;
+  cellClassName?: string;
 }
 
 interface DataTableProps {
@@ -77,7 +79,7 @@ export const DataTable = ({
             <TableRow className="bg-muted/50 hover:bg-muted/60 transition-colors">
               {expandable && !eyeInCity && <TableHead className="w-12"></TableHead>}
               {columns.map((column) => (
-                <TableHead key={column.key} className="font-semibold text-foreground">
+                <TableHead key={column.key} className={cn("font-semibold text-foreground", column.headerClassName)}>
                   {column.label}
                 </TableHead>
               ))}
@@ -117,7 +119,7 @@ export const DataTable = ({
                       </TableCell>
                     )}
                     {columns.map((column) => (
-                    <TableCell key={column.key} className="font-medium">
+                    <TableCell key={column.key} className={cn("font-medium", column.cellClassName)}>
                       {eyeInCity && column.key === (eyeColumnKey || "city") ? (
                         <div className="flex items-center gap-2">
                           <span>{row[column.key] || "-"}</span>
