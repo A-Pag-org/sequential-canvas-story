@@ -90,23 +90,12 @@ const Performance = () => {
       </div>
 
       {/* Performance Analysis */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <MetricCard
-          title="Best Performing Agency"
-          value="Transport Authority"
-          variant="success"
-        />
-        <MetricCard
-          title="Issues Under 2 Days"
+          title="Issues Under 7 days"
           value="34%"
           variant="info"
           trend={{ value: 12, isPositive: true }}
-        />
-        <MetricCard
-          title="Issues Over 5 Days"
-          value="18%"
-          variant="warning"
-          trend={{ value: -5, isPositive: false }}
         />
       </div>
 
