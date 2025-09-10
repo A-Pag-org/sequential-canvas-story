@@ -81,11 +81,17 @@ const CityWise = ({ selectedCity }: CityWiseProps) => {
         />
       </div>
 
-      {/* Issues Chart for Selected City */}
+      {/* Issues Charts for Selected City (bar charts with all issue types visible) */}
       <IssuesChart
-        title={`${selectedCity}: Issues Raised and Resolved`}
-        data={chartData}
-        type="composed"
+        title={`${selectedCity}: Issues Raised by Issue Type`}
+        data={chartData.map(d => ({ name: d.name, raised: d.raised }))}
+        type="bar"
+      />
+
+      <IssuesChart
+        title={`${selectedCity}: Issues Resolved by Issue Type`}
+        data={chartData.map(d => ({ name: d.name, raised: d.resolved }))}
+        type="bar"
       />
 
       {/* Agency Performance Table */}
