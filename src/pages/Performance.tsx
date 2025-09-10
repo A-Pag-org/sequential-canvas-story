@@ -49,7 +49,6 @@ const Performance = () => {
       render: (_: any, row: any) => (performanceTableData.findIndex(item => item.id === row.id) + 1)
     },
     { key: "issueType", label: "Issue Type" },
-    { key: "city", label: "City" },
     { key: "agency", label: "Agency" },
     {
       key: "turnAroundTime",
@@ -60,6 +59,9 @@ const Performance = () => {
         </span>
       )
     },
+    { key: "fastestCity", label: "Fastest City" },
+    { key: "slowestCity", label: "Slowest City" },
+    { key: "avgTimeTaken", label: "Avg. Time Taken" },
   ];
 
   return (
