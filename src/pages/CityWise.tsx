@@ -12,18 +12,20 @@ interface CityWiseProps {
 const cityData = {
   Delhi: {
     raised: [
-      { name: "Category 1", raised: 5620 },
-      { name: "Category 2", raised: 7886 },
-      { name: "Category 3", raised: 6793 },
-      { name: "Category 4", raised: 9876 },
-      { name: "Category 5", raised: 7543 },
-      { name: "Category 6", raised: 4365 },
-      { name: "Category 7", raised: 867 },
-      { name: "Category 8", raised: 987 },
-      { name: "Category 9", raised: 432 },
-      { name: "Category 10", raised: 10 },
+      { name: "Barren land to be greened", raised: 5620 },
+      { name: "Broken Footpath / Divider", raised: 7886 },
+      { name: "Burning of garbage, plastic, leaves, branches etc.", raised: 6793 },
+      { name: "Construction/ demolition activity without safeguards", raised: 9876 },
+      { name: "Encroachment-Building Materials Dumped on Road", raised: 7543 },
+      { name: "Garbage dumped on public land", raised: 4365 },
+      { name: "Malba, bricks, bori, etc dumped on public land", raised: 867 },
+      { name: "Overflowing Dustbins", raised: 987 },
+      { name: "Pothole", raised: 432 },
+      { name: "Sand piled on roadsides + Mud/slit on roadside", raised: 410 },
+      { name: "Unpaved Road", raised: 296 },
+      { name: "Unsurfaced Parking Lots", raised: 188 },
     ],
-    resolved: [7, 7886, 1678, 2349, 801, 4365, 667, 21, 132, 10]
+    resolved: [7, 7886, 1678, 2349, 801, 4365, 667, 21, 132, 54, 37, 23]
   }
 };
 
