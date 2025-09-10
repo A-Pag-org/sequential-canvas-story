@@ -5,15 +5,14 @@ import "./index.css";
 createRoot(document.getElementById("root")!).render(<App />);
 
 if ('serviceWorker' in navigator) {
-  if (import.meta.env.PROD) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
-  } else {
+  window.addEventListener('load', () => {
     navigator.serviceWorker.getRegistrations().then(registrations => {
       for (const registration of registrations) {
         registration.unregister().catch(() => {});
       }
     }).catch(() => {});
-  }
+    if (typeof caches !== 'undefined' && caches?.keys) {
+      caches.keys().then(keys => keys.forEach(key => caches.delete(key))).catch(() => {});
+    }
+  });
 }
