@@ -15,13 +15,14 @@ const queryClient = new QueryClient();
 const App = () => {
   const [activeModule, setActiveModule] = useState("DSP");
   const [activeSection, setActiveSection] = useState("home");
+  const [selectedCity, setSelectedCity] = useState("Bahadurghar");
 
   const renderContent = () => {
     switch (activeSection) {
       case "home":
         return <Home />;
       case "city-wise":
-        return <CityWise />;
+        return <CityWise selectedCity={selectedCity} onCityChange={setSelectedCity} />;
       case "performance":
         return <Performance />;
       default:
@@ -41,13 +42,15 @@ const App = () => {
               onModuleChange={setActiveModule}
               activeSection={activeSection}
               onSectionChange={setActiveSection}
+              selectedCity={selectedCity}
+              onCityChange={setSelectedCity}
             />
             
             <main className="container mx-auto px-6 py-8">
               <Routes>
                 <Route path="/" element={renderContent()} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/city-wise" element={<CityWise />} />
+                <Route path="/city-wise" element={<CityWise selectedCity={selectedCity} onCityChange={setSelectedCity} />} />
                 <Route path="/performance" element={<Performance />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

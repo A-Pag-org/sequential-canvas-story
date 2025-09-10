@@ -1,9 +1,12 @@
-import { useState } from "react";
 import { MetricCard } from "@/components/MetricCard";
 import { DataTable } from "@/components/DataTable";
 import { IssuesChart } from "@/components/IssuesChart";
-import { Button } from "@/components/ui/button";
 import { Activity, Clock, TrendingUp } from "lucide-react";
+
+interface CityWiseProps {
+  selectedCity: string;
+  onCityChange: (city: string) => void;
+}
 
 // Sample data for different cities
 const cityData = {
@@ -31,11 +34,7 @@ const agencyTableData = [
   { id: 4, agency: "Transport Authority", issuesRaised: 145, issueResolved: 132 },
 ];
 
-const CityWise = () => {
-  const [selectedCity, setSelectedCity] = useState("Delhi");
-  
-  const cities = ["Delhi", "Mumbai", "Bangalore", "Chennai"];
-  
+const CityWise = ({ selectedCity }: CityWiseProps) => {
   // Process data for the chart
   const chartData = cityData.Delhi.raised.map((item, index) => ({
     ...item,
@@ -55,20 +54,6 @@ const CityWise = () => {
 
   return (
     <div className="space-y-6">
-      {/* City Selector */}
-      <div className="flex gap-2 mb-6">
-        {cities.map((city) => (
-          <Button
-            key={city}
-            variant={selectedCity === city ? "default" : "outline"}
-            onClick={() => setSelectedCity(city)}
-            className="nav-button"
-          >
-            {city}
-          </Button>
-        ))}
-      </div>
-
       {/* Agency Performance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard

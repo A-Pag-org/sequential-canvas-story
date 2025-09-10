@@ -117,26 +117,6 @@ const Performance = () => {
         data={performanceTableData}
         eyeInCity={true}
       />
-
-      {/* Additional Insights */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <MetricCard
-          title="Monthly Improvement"
-          value="+15%"
-          subtitle="Resolution time decreased by 15% this month"
-          icon={Zap}
-          variant="success"
-          trend={{ value: 15, isPositive: true }}
-        />
-        <MetricCard
-          title="Critical Issues Pending"
-          value="23"
-          subtitle="Issues pending for more than 7 days"
-          icon={Clock}
-          variant="danger"
-          trend={{ value: -8, isPositive: false }}
-        />
-      </div>
     </div>
   );
 };
