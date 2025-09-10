@@ -117,6 +117,8 @@ const Performance = () => {
         columns={performanceColumns}
         data={performanceTableData}
         eyeInCity={true}
+        eyeColumnKey="issueType"
+        singleExpand={true}
       />
     </div>
   );
