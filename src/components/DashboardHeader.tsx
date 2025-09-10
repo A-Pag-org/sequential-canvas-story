@@ -98,14 +98,14 @@ export const DashboardHeader = ({
         </div>
 
         {activeSection === "city-wise" && (
-          <div className="flex flex-wrap gap-2 py-2 border-t border-white/10">
+          <div className="grid grid-cols-8 gap-1 py-1 border-t border-white/10">
             {cities.map((city) => (
               <Button
                 key={city}
                 variant={selectedCity === city ? "default" : "outline"}
                 size="sm"
                 onClick={() => onCityChange(city)}
-                className="nav-button whitespace-nowrap h-8 px-2 text-xs"
+                className="nav-button h-8 px-2 text-xs truncate"
               >
                 {city}
               </Button>
