@@ -119,37 +119,18 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
         />
 
         <IssuesChart
-          title="Target for malba collection through SCC"
+          title="Target vs Actual malba collected in SCC"
           data={[
-            { name: "Baharudgarh", target: 2500 },
-            { name: "Delhi", target: 45000 },
-            { name: "Faridabad", target: 3700 },
-            { name: "Ghaziabad", target: 4800 },
-            { name: "Greater Noida", target: 3500 },
-            { name: "Gurgaon", target: 9000 },
-            { name: "Manesar", target: 2000 },
-            { name: "Noida", target: 5000 },
+            { name: "Baharudgarh", target: 2500, raised: 300 },
+            { name: "Delhi", target: 45000, raised: 17000 },
+            { name: "Faridabad", target: 3700, raised: 700 },
+            { name: "Ghaziabad", target: 4800, raised: 4000 },
+            { name: "Greater Noida", target: 3500, raised: 1000 },
+            { name: "Gurgaon", target: 9000, raised: 5000 },
+            { name: "Manesar", target: 2000, raised: 95 },
+            { name: "Noida", target: 5000, raised: 3200 },
           ]}
           type="bar"
-          showTarget={true}
-          showActual={false}
-        />
-
-        <IssuesChart
-          title="Actual malba collected in SCC"
-          data={[
-            { name: "Baharudgarh", raised: 300 },
-            { name: "Delhi", raised: 17000 },
-            { name: "Faridabad", raised: 700 },
-            { name: "Ghaziabad", raised: 4000 },
-            { name: "Greater Noida", raised: 1000 },
-            { name: "Gurgaon", raised: 5000 },
-            { name: "Manesar", raised: 95 },
-            { name: "Noida", raised: 3200 },
-          ]}
-          type="bar"
-          showTarget={false}
-          showActual={true}
         />
       </div>
     );
