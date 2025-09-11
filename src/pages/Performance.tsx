@@ -185,7 +185,7 @@ const Performance = ({ activeModule }: PerformanceProps) => {
         </div>
 
         <IssuesChart
-          title="active SCC"
+          title="Active SCC"
           data={[
             { name: "Baharudgarh", raised: 100 },
             { name: "Delhi", raised: 81 },
