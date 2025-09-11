@@ -4,6 +4,7 @@ import { IssuesChart } from "@/components/IssuesChart";
 import { Activity, Clock, TrendingUp } from "lucide-react";
 
 interface CityWiseProps {
+  activeModule: string;
   selectedCity: string;
   onCityChange: (city: string) => void;
 }
@@ -69,7 +70,7 @@ const agenciesByCity: Record<string, AgencyRow[]> = {
   ],
 };
 
-const CityWise = ({ selectedCity }: CityWiseProps) => {
+const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
   // Process data for the chart
   const chartData = cityData.Delhi.raised.map((item, index) => ({
     ...item,
@@ -88,6 +89,20 @@ const CityWise = ({ selectedCity }: CityWiseProps) => {
     { key: "issuesRaised", label: "Issues Raised", render: (value: number) => value.toLocaleString() },
     { key: "issueResolved", label: "Issue Resolved", render: (value: number) => value.toLocaleString() },
   ];
+
+  if (activeModule === "MRS") {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <MetricCard title="Target SCC to be set up" value={163} variant="info" />
+          <MetricCard title="Number of SCC set up so far" value={140} variant="success" />
+          <MetricCard title="Number of SCC with dust mitigation systems" value={31} variant="warning" />
+          <MetricCard title="Number of active SCC (>0 malba intake/month)" value={104} variant="info" />
+          <MetricCard title="Number of geotagged SCC" value={65} variant="info" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
