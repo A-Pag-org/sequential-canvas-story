@@ -29,7 +29,7 @@ const App = () => {
       case "city-wise":
         return <CityWise activeModule={activeModule} selectedCity={selectedCity} onCityChange={setSelectedCity} />;
       case "performance":
-        return <Performance />;
+        return <Performance activeModule={activeModule} />;
       default:
         return <Home />;
     }
@@ -56,7 +56,7 @@ const App = () => {
                 <Route path="/" element={renderContent()} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/city-wise" element={<CityWise activeModule={activeModule} selectedCity={selectedCity} onCityChange={setSelectedCity} />} />
-                <Route path="/performance" element={<Performance />} />
+                <Route path="/performance" element={<Performance activeModule={activeModule} />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
