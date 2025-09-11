@@ -146,8 +146,8 @@ const Performance = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           title="City with Fastest Issue Resolution"
-          value="Chennai"
-          subtitle="City Name : 1.8 days avg"
+          value="Noida"
+          subtitle="Noida: 1.8 days avg"
           icon={Zap}
           variant="success"
         />
