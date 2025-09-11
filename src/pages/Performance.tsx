@@ -137,7 +137,7 @@ const Performance = () => {
     },
     { key: "fastestCity", label: "Fastest City", headerClassName: "w-40", cellClassName: "w-40" },
     { key: "slowestCity", label: "Slowest City", headerClassName: "w-40", cellClassName: "w-40" },
-    { key: "avgTimeTaken", label: "Avg. Time Taken", headerClassName: "w-44", cellClassName: "w-44" },
+    { key: "avgTimeTaken", label: "Avg. time taken", headerClassName: "w-44", cellClassName: "w-44" },
   ];
 
   return (
