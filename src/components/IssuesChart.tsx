@@ -24,9 +24,11 @@ interface IssuesChartProps {
   title: string;
   data: ChartDataPoint[];
   type?: "bar" | "composed";
+  showTarget?: boolean;
+  showActual?: boolean;
 }
 
-export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -144,27 +146,31 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
               />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
-            <Bar
-              dataKey="target"
-              name="Target"
-              fill="hsl(var(--chart-3))"
-              radius={[6, 6, 0, 0]}
-              opacity={0.8}
-              barSize={isMobile ? 20 : 28}
+            {showTarget && (
+              <Bar
+                dataKey="target"
+                name="Target"
+                fill="hsl(var(--chart-3))"
+                radius={[6, 6, 0, 0]}
+                opacity={0.8}
+                barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
-            >
-              <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
-            </Bar>
-            <Bar
-              dataKey="raised"
-              name="Actual"
-              fill="hsl(var(--chart-2))"
-              radius={[6, 6, 0, 0]}
-              barSize={isMobile ? 20 : 28}
+              >
+                <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
+              </Bar>
+            )}
+            {showActual && (
+              <Bar
+                dataKey="raised"
+                name="Actual"
+                fill="hsl(var(--chart-2))"
+                radius={[6, 6, 0, 0]}
+                barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
-            >
-              <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
-            </Bar>
+              >
+                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+              </Bar>
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       </CardContent>
