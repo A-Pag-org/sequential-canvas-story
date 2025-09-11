@@ -17,12 +17,17 @@ const App = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedCity, setSelectedCity] = useState("Bahadurghar");
 
+  const handleModuleChange = (module: string) => {
+    setActiveModule(module);
+    setActiveSection(module === "MRS" ? "city-wise" : "home");
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case "home":
         return <Home />;
       case "city-wise":
-        return <CityWise selectedCity={selectedCity} onCityChange={setSelectedCity} />;
+        return <CityWise activeModule={activeModule} selectedCity={selectedCity} onCityChange={setSelectedCity} />;
       case "performance":
         return <Performance />;
       default:
@@ -39,7 +44,7 @@ const App = () => {
           <div className="min-h-screen bg-background">
             <DashboardHeader
               activeModule={activeModule}
-              onModuleChange={setActiveModule}
+              onModuleChange={handleModuleChange}
               activeSection={activeSection}
               onSectionChange={setActiveSection}
               selectedCity={selectedCity}
@@ -50,7 +55,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={renderContent()} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/city-wise" element={<CityWise selectedCity={selectedCity} onCityChange={setSelectedCity} />} />
+                <Route path="/city-wise" element={<CityWise activeModule={activeModule} selectedCity={selectedCity} onCityChange={setSelectedCity} />} />
                 <Route path="/performance" element={<Performance />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
