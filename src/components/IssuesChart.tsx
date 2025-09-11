@@ -26,9 +26,10 @@ interface IssuesChartProps {
   type?: "bar" | "composed";
   showTarget?: boolean;
   showActual?: boolean;
+  valueSuffix?: string;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -38,7 +39,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
           <p className="font-medium mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
-              {entry.name}: {entry.value.toLocaleString()}
+              {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
             </p>
           ))}
         </div>
@@ -61,7 +62,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
         fontWeight={600}
         fill="hsl(var(--foreground))"
       >
-        {Number(value).toLocaleString()}
+        {Number(value).toLocaleString()}{valueSuffix ?? ""}
       </text>
     );
   };
