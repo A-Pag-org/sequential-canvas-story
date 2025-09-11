@@ -204,7 +204,7 @@ const Performance = ({ activeModule }: PerformanceProps) => {
         />
 
         <IssuesChart
-          title="City-wise % malba collected/target"
+          title="City-wise percentage malba collected/target"
           data={cityPercents.map(c => ({ name: c.city, raised: c.percent }))}
           type="bar"
           showTarget={false}
