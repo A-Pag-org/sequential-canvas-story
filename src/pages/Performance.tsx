@@ -10,7 +10,7 @@ const performanceTableData = [
     agency: "Urban Greening Dept",
     turnAroundTime: "6.2 days",
     fastestCity: "Noida",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "5.1 days",
   },
   {
@@ -46,7 +46,7 @@ const performanceTableData = [
     agency: "Traffic Police",
     turnAroundTime: "3.2 days",
     fastestCity: "Delhi",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "3.6 days",
   },
   {
@@ -73,7 +73,7 @@ const performanceTableData = [
     agency: "Sanitation Department",
     turnAroundTime: "1.6 days",
     fastestCity: "Noida",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "2.0 days",
   },
   {
@@ -109,7 +109,7 @@ const performanceTableData = [
     agency: "Urban Development Authority",
     turnAroundTime: "5.1 days",
     fastestCity: "Delhi",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "4.7 days",
   },
 ];
