@@ -27,9 +27,10 @@ interface IssuesChartProps {
   showTarget?: boolean;
   showActual?: boolean;
   valueSuffix?: string;
+  showLegend?: boolean;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -146,7 +147,9 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 tickCount={6}
               />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
+            {showLegend && (
+              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
+            )}
             {showTarget && (
               <Bar
                 dataKey="target"
