@@ -194,6 +194,12 @@
     box-shadow: 0 8px 32px hsl(var(--info) / 0.2);
   }
 
+  .metric-card-primary {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground shadow-lg;
+    box-shadow: 0 8px 32px hsl(var(--primary) / 0.2);
+  }
+
   .nav-button {
     @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent;
     backdrop-filter: blur(10px);

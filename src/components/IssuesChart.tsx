@@ -15,8 +15,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChartDataPoint {
   name: string;
-  raised: number;
-  resolved: number;
+  raised?: number;
+  resolved?: number;
   target?: number;
 }
 
@@ -24,9 +24,13 @@ interface IssuesChartProps {
   title: string;
   data: ChartDataPoint[];
   type?: "bar" | "composed";
+  showTarget?: boolean;
+  showActual?: boolean;
+  valueSuffix?: string;
+  showLegend?: boolean;
 }
 
-export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -36,7 +40,7 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
           <p className="font-medium mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
-              {entry.name}: {entry.value.toLocaleString()}
+              {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
             </p>
           ))}
         </div>
@@ -59,7 +63,7 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         fontWeight={600}
         fill="hsl(var(--foreground))"
       >
-        {Number(value).toLocaleString()}
+        {Number(value).toLocaleString()}{valueSuffix ?? ""}
       </text>
     );
   };
@@ -143,28 +147,34 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
                 tickCount={6}
               />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
-            <Bar
-              dataKey="target"
-              name="Target"
-              fill="hsl(var(--chart-3))"
-              radius={[6, 6, 0, 0]}
-              opacity={0.8}
-              barSize={isMobile ? 20 : 28}
+            {showLegend && (
+              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
+            )}
+            {showTarget && (
+              <Bar
+                dataKey="target"
+                name="Target"
+                fill="hsl(var(--chart-3))"
+                radius={[6, 6, 0, 0]}
+                opacity={0.8}
+                barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
-            >
-              <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
-            </Bar>
-            <Bar
-              dataKey="raised"
-              name="Actual"
-              fill="hsl(var(--chart-2))"
-              radius={[6, 6, 0, 0]}
-              barSize={isMobile ? 20 : 28}
+              >
+                <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
+              </Bar>
+            )}
+            {showActual && (
+              <Bar
+                dataKey="raised"
+                name="Actual"
+                fill="hsl(var(--chart-2))"
+                radius={[6, 6, 0, 0]}
+                barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
-            >
-              <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
-            </Bar>
+              >
+                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+              </Bar>
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       </CardContent>
