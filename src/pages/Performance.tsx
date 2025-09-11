@@ -10,7 +10,7 @@ const performanceTableData = [
     agency: "Urban Greening Dept",
     turnAroundTime: "6.2 days",
     fastestCity: "Noida",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "5.1 days",
   },
   {
@@ -46,7 +46,7 @@ const performanceTableData = [
     agency: "Traffic Police",
     turnAroundTime: "3.2 days",
     fastestCity: "Delhi",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "3.6 days",
   },
   {
@@ -73,7 +73,7 @@ const performanceTableData = [
     agency: "Sanitation Department",
     turnAroundTime: "1.6 days",
     fastestCity: "Noida",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "2.0 days",
   },
   {
@@ -109,7 +109,7 @@ const performanceTableData = [
     agency: "Urban Development Authority",
     turnAroundTime: "5.1 days",
     fastestCity: "Delhi",
-    slowestCity: "Ghaziadabad",
+    slowestCity: "Ghaziabad",
     avgTimeTaken: "4.7 days",
   },
 ];
@@ -137,7 +137,7 @@ const Performance = () => {
     },
     { key: "fastestCity", label: "Fastest City", headerClassName: "w-40", cellClassName: "w-40" },
     { key: "slowestCity", label: "Slowest City", headerClassName: "w-40", cellClassName: "w-40" },
-    { key: "avgTimeTaken", label: "Avg. Time Taken", headerClassName: "w-44", cellClassName: "w-44" },
+    { key: "avgTimeTaken", label: "Avg. time taken", headerClassName: "w-44", cellClassName: "w-44" },
   ];
 
   return (
@@ -146,15 +146,15 @@ const Performance = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           title="City with Fastest Issue Resolution"
-          value="Chennai"
-          subtitle="City Name : 1.8 days avg"
+          value="Noida"
+          subtitle="Noida: 1.8 days avg"
           icon={Zap}
           variant="success"
         />
         <MetricCard
           title="City with Slowest Issue Resolution"
-          value="Mumbai"  
-          subtitle="City Name : 5.2 days avg"
+          value="Ghaziabad"
+          subtitle="Ghaziabad: 5.2 days avg"
           icon={Clock}
           variant="danger"
         />
