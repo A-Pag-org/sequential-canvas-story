@@ -15,8 +15,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChartDataPoint {
   name: string;
-  raised: number;
-  resolved: number;
+  raised?: number;
+  resolved?: number;
   target?: number;
 }
 
