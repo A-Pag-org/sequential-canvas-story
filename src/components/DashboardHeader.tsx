@@ -16,8 +16,13 @@ const modules = [
   { id: "C&D", label: "C&D" },
 ];
 
-const sections = [
+const defaultSections = [
   { id: "home", label: "Home" },
+  { id: "city-wise", label: "City Wise" },
+  { id: "performance", label: "Performance" },
+];
+
+const mrsSections = [
   { id: "city-wise", label: "City Wise" },
   { id: "performance", label: "Performance" },
 ];
@@ -75,7 +80,7 @@ export const DashboardHeader = ({
 
         {/* Secondary Navigation */}
         <div className="flex gap-3 py-2">
-          {sections.map((section) => (
+          {(activeModule === "MRS" ? mrsSections : defaultSections).map((section) => (
             <Button
               key={section.id}
               variant="ghost"
