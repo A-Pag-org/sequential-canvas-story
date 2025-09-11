@@ -94,10 +94,10 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <MetricCard title="Target SCC to be set up" value={163} variant="info" />
+          <MetricCard title="Target SCC to be set up" value={163} variant="primary" />
           <MetricCard title="Number of SCC set up so far" value={140} variant="success" />
           <MetricCard title="Number of SCC with dust mitigation systems" value={31} variant="warning" />
-          <MetricCard title="Number of active SCC (>0 malba intake/month)" value={104} variant="info" />
+          <MetricCard title="Number of active SCC (>0 malba intake/month)" value={104} variant="danger" />
           <MetricCard title="Number of geotagged SCC" value={65} variant="info" />
         </div>
       </div>
