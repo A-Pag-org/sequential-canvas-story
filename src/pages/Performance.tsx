@@ -153,8 +153,8 @@ const Performance = () => {
         />
         <MetricCard
           title="City with Slowest Issue Resolution"
-          value="Mumbai"  
-          subtitle="City Name : 5.2 days avg"
+          value="Ghaziabad"
+          subtitle="Ghaziabad: 5.2 days avg"
           icon={Clock}
           variant="danger"
         />
