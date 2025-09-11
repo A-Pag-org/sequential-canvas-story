@@ -1,5 +1,6 @@
 import { MetricCard } from "@/components/MetricCard";
 import { DataTable } from "@/components/DataTable";
+import { IssuesChart } from "@/components/IssuesChart";
 import { Clock, Zap, Target, Trophy, ArrowDownCircle } from "lucide-react";
 
 interface PerformanceProps {
@@ -184,6 +185,31 @@ const Performance = ({ activeModule }: PerformanceProps) => {
             variant="danger"
           />
         </div>
+
+        <IssuesChart
+          title="City-wise % active SCC"
+          data={[
+            { name: "Baharudgarh", raised: 100 },
+            { name: "Delhi", raised: 81 },
+            { name: "Faridabad", raised: 38 },
+            { name: "Ghaziabad", raised: 75 },
+            { name: "Greater Noida", raised: 100 },
+            { name: "Gurgaon", raised: 23 },
+            { name: "Manesar", raised: 100 },
+            { name: "Noida", raised: 100 },
+          ]}
+          type="bar"
+          showTarget={false}
+          valueSuffix="%"
+        />
+
+        <IssuesChart
+          title="City-wise % malba collected/target"
+          data={cityPercents.map(c => ({ name: c.city, raised: c.percent }))}
+          type="bar"
+          showTarget={false}
+          valueSuffix="%"
+        />
       </div>
     );
   }
