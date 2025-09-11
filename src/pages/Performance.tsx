@@ -199,6 +199,7 @@ const Performance = ({ activeModule }: PerformanceProps) => {
           type="bar"
           showTarget={false}
           valueSuffix="%"
+          showLegend={false}
         />
 
         <IssuesChart
@@ -207,6 +208,7 @@ const Performance = ({ activeModule }: PerformanceProps) => {
           type="bar"
           showTarget={false}
           valueSuffix="%"
+          showLegend={false}
         />
       </div>
     );
