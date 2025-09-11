@@ -28,6 +28,7 @@ interface IssuesChartProps {
 
 export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => {
   const isMobile = useIsMobile();
+  const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -70,14 +71,16 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
-            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 28 : 24) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+          <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
+            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-              <XAxis 
-                dataKey="name" 
+              <XAxis
+                dataKey="name"
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 fontWeight={500}
+                interval={0}
+                tick={xTickProps}
               />
               <YAxis
                 stroke="hsl(var(--muted-foreground))"
@@ -121,14 +124,16 @@ export const IssuesChart = ({ title, data, type = "bar" }: IssuesChartProps) => 
         <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
-          <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 28 : 24) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+        <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
+          <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis 
-              dataKey="name" 
+            <XAxis
+              dataKey="name"
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
               fontWeight={500}
+              interval={0}
+              tick={xTickProps}
             />
             <YAxis
                 stroke="hsl(var(--muted-foreground))"

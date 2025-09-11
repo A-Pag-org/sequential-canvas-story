@@ -16,6 +16,8 @@ interface TableColumn {
   key: string;
   label: string;
   render?: (value: any, row: any) => React.ReactNode;
+  headerClassName?: string;
+  cellClassName?: string;
 }
 
 interface DataTableProps {
@@ -26,6 +28,8 @@ interface DataTableProps {
   onRowExpand?: (rowId: string | number) => void;
   renderExpanded?: (row: any) => React.ReactNode;
   eyeInCity?: boolean;
+  eyeColumnKey?: string;
+  singleExpand?: boolean;
 }
 
 export const DataTable = ({
@@ -36,15 +40,22 @@ export const DataTable = ({
   onRowExpand,
   renderExpanded,
   eyeInCity = false,
+  eyeColumnKey,
+  singleExpand = false,
 }: DataTableProps) => {
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
 
   const toggleRow = (rowId: string | number) => {
-    const newExpandedRows = new Set(expandedRows);
-    if (newExpandedRows.has(rowId)) {
-      newExpandedRows.delete(rowId);
+    let newExpandedRows: Set<string | number>;
+    if (singleExpand) {
+      newExpandedRows = expandedRows.has(rowId) ? new Set() : new Set([rowId]);
     } else {
-      newExpandedRows.add(rowId);
+      newExpandedRows = new Set(expandedRows);
+      if (newExpandedRows.has(rowId)) {
+        newExpandedRows.delete(rowId);
+      } else {
+        newExpandedRows.add(rowId);
+      }
     }
     setExpandedRows(newExpandedRows);
     onRowExpand?.(rowId);
@@ -68,7 +79,7 @@ export const DataTable = ({
             <TableRow className="bg-muted/50 hover:bg-muted/60 transition-colors">
               {expandable && !eyeInCity && <TableHead className="w-12"></TableHead>}
               {columns.map((column) => (
-                <TableHead key={column.key} className="font-semibold text-foreground">
+                <TableHead key={column.key} className={cn("font-semibold text-foreground", column.headerClassName)}>
                   {column.label}
                 </TableHead>
               ))}
@@ -108,8 +119,8 @@ export const DataTable = ({
                       </TableCell>
                     )}
                     {columns.map((column) => (
-                    <TableCell key={column.key} className="font-medium">
-                      {eyeInCity && column.key === "city" ? (
+                    <TableCell key={column.key} className={cn("font-medium", column.cellClassName)}>
+                      {eyeInCity && column.key === (eyeColumnKey || "city") ? (
                         <div className="flex items-center gap-2">
                           <span>{row[column.key] || "-"}</span>
                           <Button
@@ -124,8 +135,8 @@ export const DataTable = ({
                           </Button>
                         </div>
                       ) : (
-                        // For other cells, optionally gate content until expanded when using eyeInCity
-                        (eyeInCity && (column.key === "agency" || column.key === "turnAroundTime") && !isExpanded)
+                        // Gate selected columns until expanded when using eyeInCity
+                        (eyeInCity && ["agency", "turnAroundTime", "fastestCity", "slowestCity", "avgTimeTaken"].includes(column.key) && !isExpanded)
                           ? <span>-</span>
                           : (column.render ? column.render(row[column.key], row) : <span>{row[column.key] || "-"}</span>)
                       )}

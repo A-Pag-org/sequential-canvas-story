@@ -24,7 +24,15 @@
   </head>
 
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root">Loading…</div>
+    <script>
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.childElementCount === 0) {
+          root.textContent = 'Still loading… Please refresh the preview.';
+        }
+      }, 3000);
+    </script>
+    <script type="module" src="/src/main.tsx?v=3"></script>
   </body>
 </html>

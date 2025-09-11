@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +6,8 @@ interface DashboardHeaderProps {
   onModuleChange: (module: string) => void;
   activeSection: string;
   onSectionChange: (section: string) => void;
+  selectedCity: string;
+  onCityChange: (city: string) => void;
 }
 
 const modules = [
@@ -21,17 +22,30 @@ const sections = [
   { id: "performance", label: "Performance" },
 ];
 
+const cities = [
+  "Bahadurghar",
+  "Delhi",
+  "Faridabad",
+  "Ghaziadabad",
+  "Greater Noida",
+  "Noida",
+  "Gurgaon",
+  "Manesar",
+];
+
 export const DashboardHeader = ({
   activeModule,
   onModuleChange,
   activeSection,
   onSectionChange,
+  selectedCity,
+  onCityChange,
 }: DashboardHeaderProps) => {
   return (
     <header className="dashboard-header">
       <div className="container mx-auto px-6">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between py-6 border-b border-white/20">
+        <div className="flex items-center justify-between py-3 border-b border-white/20">
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">MoHUA Dashboard</h1>
@@ -60,7 +74,7 @@ export const DashboardHeader = ({
         </div>
 
         {/* Secondary Navigation */}
-        <div className="flex gap-3 py-4">
+        <div className="flex gap-3 py-2">
           {sections.map((section) => (
             <Button
               key={section.id}
@@ -82,6 +96,22 @@ export const DashboardHeader = ({
             </Button>
           ))}
         </div>
+
+        {activeSection === "city-wise" && (
+          <div className="grid grid-cols-8 gap-1 py-1 border-t border-white/10">
+            {cities.map((city) => (
+              <Button
+                key={city}
+                variant={selectedCity === city ? "default" : "outline"}
+                size="sm"
+                onClick={() => onCityChange(city)}
+                className="nav-button h-8 px-2 text-xs truncate"
+              >
+                {city}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
     </header>
   );
