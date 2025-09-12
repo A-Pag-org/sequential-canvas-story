@@ -15,12 +15,6 @@ const performanceByCity = [
   { name: "Noida",        targetRaised: 21000, actualRaised: 17742, targetResolved: 18900,  actualResolved: 14253 },
 ];
 
-const raisedChartData = performanceByCity.map((c) => ({
-  name: c.name,
-  target: c.targetRaised,
-  raised: c.actualRaised,
-}));
-
 const resolvedChartData = performanceByCity.map((c) => ({
   name: c.name,
   target: c.targetResolved,
@@ -80,14 +74,6 @@ const Home = () => {
           variant="info"
         />
       </div>
-
-      {/* Issues Raised Chart */}
-      <IssuesChart
-        title="Issues Raised - Target vs Actual (City-wise)"
-        data={raisedChartData}
-        type="bar"
-        showPercentOfTarget
-      />
 
       {/* Issues Resolved Chart */}
       <IssuesChart
