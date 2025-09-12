@@ -28,19 +28,30 @@ interface IssuesChartProps {
   showActual?: boolean;
   valueSuffix?: string;
   showLegend?: boolean;
+  showPercentOfTarget?: boolean;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      // Attempt to compute % for Actual vs Target where applicable
+      const targetEntry = payload.find((p: any) => p.dataKey === 'target');
+      const actualEntry = payload.find((p: any) => p.dataKey === 'raised');
+      const targetVal = targetEntry?.value as number | undefined;
+      const actualVal = actualEntry?.value as number | undefined;
+      const pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
+        ? Math.round((actualVal / targetVal) * 100)
+        : undefined;
+
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="font-medium mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
               {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
+              {pct != null && entry.dataKey === 'raised' ? ` (${pct}%)` : ""}
             </p>
           ))}
         </div>
@@ -64,6 +75,28 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
         fill="hsl(var(--foreground))"
       >
         {Number(value).toLocaleString()}{valueSuffix ?? ""}
+      </text>
+    );
+  };
+
+  const PercentOfTargetLabel = (props: any) => {
+    const { x, y, width, value, payload } = props;
+    if (value == null) return null;
+    const posX = (x || 0) + (width || 0) / 2;
+    const posY = (y || 0) - 8;
+    const target = Number(payload?.target ?? 0);
+    const pct = target > 0 ? Math.round((Number(value) / target) * 100) : 0;
+    const text = `${Number(value).toLocaleString()} (${pct}%)`;
+    return (
+      <text
+        x={posX}
+        y={posY}
+        textAnchor="middle"
+        fontSize={12}
+        fontWeight={600}
+        fill="hsl(var(--foreground))"
+      >
+        {text}
       </text>
     );
   };
@@ -172,7 +205,11 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
-                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+                {showPercentOfTarget ? (
+                  <LabelList dataKey="raised" position="top" content={<PercentOfTargetLabel />} />
+                ) : (
+                  <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+                )}
               </Bar>
             )}
           </ComposedChart>
