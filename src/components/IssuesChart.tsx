@@ -79,27 +79,6 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
     );
   };
 
-  const PercentOfTargetLabel = (props: any) => {
-    const { x, y, width, value, payload } = props;
-    if (value == null) return null;
-    const posX = (x || 0) + (width || 0) / 2;
-    const posY = (y || 0) - 8;
-    const target = Number(payload?.target ?? 0);
-    const pct = target > 0 ? Math.round((Number(value) / target) * 100) : 0;
-    const text = `${Number(value).toLocaleString()} (${pct}%)`;
-    return (
-      <text
-        x={posX}
-        y={posY}
-        textAnchor="middle"
-        fontSize={12}
-        fontWeight={600}
-        fill="hsl(var(--foreground))"
-      >
-        {text}
-      </text>
-    );
-  };
 
   if (type === "composed") {
     return (
@@ -205,11 +184,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
-                {showPercentOfTarget ? (
-                  <LabelList dataKey="raised" position="top" content={<PercentOfTargetLabel />} />
-                ) : (
-                  <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
-                )}
+                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>
             )}
           </ComposedChart>
