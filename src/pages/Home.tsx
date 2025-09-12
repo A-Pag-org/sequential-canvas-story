@@ -60,6 +60,7 @@ const Home = () => {
         title="Issues Raised - Target vs Actual (City-wise)"
         data={raisedChartData}
         type="bar"
+        showPercentOfTarget
       />
 
       {/* Issues Resolved Chart */}
@@ -67,6 +68,7 @@ const Home = () => {
         title="Issues Resolved - Target vs Actual (City-wise)"
         data={resolvedChartData}
         type="bar"
+        showPercentOfTarget
       />
 
     </div>

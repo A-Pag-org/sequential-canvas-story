@@ -28,19 +28,30 @@ interface IssuesChartProps {
   showActual?: boolean;
   valueSuffix?: string;
   showLegend?: boolean;
+  showPercentOfTarget?: boolean;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      // Attempt to compute % for Actual vs Target where applicable
+      const targetEntry = payload.find((p: any) => p.dataKey === 'target');
+      const actualEntry = payload.find((p: any) => p.dataKey === 'raised');
+      const targetVal = targetEntry?.value as number | undefined;
+      const actualVal = actualEntry?.value as number | undefined;
+      const pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
+        ? Math.round((actualVal / targetVal) * 100)
+        : undefined;
+
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="font-medium mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
               {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
+              {pct != null && entry.dataKey === 'raised' ? ` (${pct}%)` : ""}
             </p>
           ))}
         </div>
@@ -67,6 +78,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
       </text>
     );
   };
+
 
   if (type === "composed") {
     return (
