@@ -78,7 +78,7 @@ const Home = () => {
 
       {/* Issues Resolved Chart - Stacked with Line */}
       <IssuesChart
-        title="Issue Status by City - Stacked with Line"
+        title="Resolution Rate"
         data={resolvedChartData}
         type="stacked-line"
       />
