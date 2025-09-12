@@ -20,18 +20,21 @@ const bgByVariant: Record<Variant, string> = {
 export function IssueStatCard({ title, target, actual, variant, className }: IssueStatCardProps) {
   const pct = target > 0 ? Math.round((actual / target) * 100) : 0;
 
+  const leftLabel = variant === "raised" ? "Raised" : "Target";
+  const rightLabel = variant === "raised" ? "Resolved" : "Actual";
+
   return (
     <Card className={cn("rounded-2xl p-5 md:p-6", bgByVariant[variant], className)}>
       <div className="flex flex-col items-center gap-4">
         <h3 className={cn("text-xl md:text-2xl font-semibold text-center")}>{title}</h3>
 
         <div className="w-full grid grid-cols-3 items-center gap-2 md:gap-4">
-          {/* Left: Target */}
+          {/* Left */}
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-sm">
               <span className="text-red-600 font-semibold text-sm md:text-base">{target.toLocaleString()}</span>
             </div>
-            <span className="mt-2 text-sm md:text-base opacity-90">Target</span>
+            <span className="mt-2 text-sm md:text-base opacity-90">{leftLabel}</span>
           </div>
 
           {/* Divider */}
@@ -39,17 +42,18 @@ export function IssueStatCard({ title, target, actual, variant, className }: Iss
             <div className={cn("w-px h-14 md:h-16", variant === "resolved" ? "bg-white/70" : "bg-black/40")} />
           </div>
 
-          {/* Right: Actual */}
+          {/* Right */}
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-sm">
               <span className="text-red-600 font-semibold text-sm md:text-base">{actual.toLocaleString()}</span>
             </div>
-            <div className="mt-2 text-center">
-              <div className="text-sm md:text-base opacity-90">Actual</div>
-              <div className="text-sm md:text-base font-semibold">{pct}%</div>
-            </div>
+            <span className="mt-2 text-sm md:text-base opacity-90">{rightLabel}</span>
           </div>
         </div>
+
+        {variant === "raised" && (
+          <div className="mt-2 text-center text-base md:text-lg font-semibold">{pct}%</div>
+        )}
       </div>
     </Card>
   );
