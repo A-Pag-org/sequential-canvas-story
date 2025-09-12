@@ -76,12 +76,11 @@ const Home = () => {
         />
       </div>
 
-      {/* Issues Resolved Chart */}
+      {/* Issues Resolved Chart - Stacked with Line */}
       <IssuesChart
-        title="Issues Resolved - Target vs Actual (City-wise)"
+        title="Issue Status by City - Stacked with Line"
         data={resolvedChartData}
-        type="bar"
-        showPercentOfTarget
+        type="stacked-line"
       />
 
     </div>
