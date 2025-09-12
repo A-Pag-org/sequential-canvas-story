@@ -42,9 +42,9 @@ const Home = () => {
       {/* Summary Cards - DSP style */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <IssueStatCard
-          title="Issues Raised"
-          target={totals.targetRaised}
-          actual={totals.actualRaised}
+          title="Actual Issues"
+          target={totals.actualRaised}
+          actual={totals.actualResolved}
           variant="raised"
         />
         <IssueStatCard
