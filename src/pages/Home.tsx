@@ -1,5 +1,7 @@
 import { IssuesChart } from "@/components/IssuesChart";
 import { IssueStatCard } from "@/components/IssueStatCard";
+import { MetricCard } from "@/components/MetricCard";
+import { Clock, Zap, Target } from "lucide-react";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
@@ -52,6 +54,30 @@ const Home = () => {
           target={totals.targetResolved}
           actual={totals.actualResolved}
           variant="resolved"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard
+          title="City with Fastest Issue Resolution"
+          value="Noida"
+          subtitle="Noida: 1.8 days avg"
+          icon={Zap}
+          variant="success"
+        />
+        <MetricCard
+          title="City with Slowest Issue Resolution"
+          value="Ghaziabad"
+          subtitle="Ghaziabad: 5.2 days avg"
+          icon={Clock}
+          variant="danger"
+        />
+        <MetricCard
+          title="Average Issue Resolution Time by City"
+          value="3.4 days"
+          subtitle="Avg. Time across all cities"
+          icon={Target}
+          variant="info"
         />
       </div>
 
