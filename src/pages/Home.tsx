@@ -1,5 +1,7 @@
 import { IssuesChart } from "@/components/IssuesChart";
 import { IssueStatCard } from "@/components/IssueStatCard";
+import { MetricCard } from "@/components/MetricCard";
+import { Clock, Zap, Target } from "lucide-react";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
@@ -13,16 +15,11 @@ const performanceByCity = [
   { name: "Noida",        targetRaised: 21000, actualRaised: 17742, targetResolved: 18900,  actualResolved: 14253 },
 ];
 
-const raisedChartData = performanceByCity.map((c) => ({
-  name: c.name,
-  target: c.targetRaised,
-  raised: c.actualRaised,
-}));
-
 const resolvedChartData = performanceByCity.map((c) => ({
   name: c.name,
-  target: c.targetResolved,
-  raised: c.actualResolved,
+  actualResolved: c.actualResolved,
+  targetResolved: c.targetResolved,
+  actualRaised: c.actualRaised,
 }));
 
 const totals = performanceByCity.reduce(
@@ -42,9 +39,9 @@ const Home = () => {
       {/* Summary Cards - DSP style */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <IssueStatCard
-          title="Issues Raised"
-          target={totals.targetRaised}
-          actual={totals.actualRaised}
+          title="Actual Issues"
+          target={totals.actualRaised}
+          actual={totals.actualResolved}
           variant="raised"
         />
         <IssueStatCard
@@ -55,20 +52,35 @@ const Home = () => {
         />
       </div>
 
-      {/* Issues Raised Chart */}
-      <IssuesChart
-        title="Issues Raised - Target vs Actual (City-wise)"
-        data={raisedChartData}
-        type="bar"
-        showPercentOfTarget
-      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard
+          title="City with Fastest Issue Resolution"
+          value="Noida"
+          subtitle="Noida: 1.8 days avg"
+          icon={Zap}
+          variant="success"
+        />
+        <MetricCard
+          title="City with Slowest Issue Resolution"
+          value="Ghaziabad"
+          subtitle="Ghaziabad: 5.2 days avg"
+          icon={Clock}
+          variant="danger"
+        />
+        <MetricCard
+          title="Average Issue Resolution Time by City"
+          value="3.4 days"
+          subtitle="Avg. Time across all cities"
+          icon={Target}
+          variant="info"
+        />
+      </div>
 
-      {/* Issues Resolved Chart */}
+      {/* Issues Resolved Chart - Stacked with Line */}
       <IssuesChart
-        title="Issues Resolved - Target vs Actual (City-wise)"
+        title="Issue Status by City - Stacked with Line"
         data={resolvedChartData}
-        type="bar"
-        showPercentOfTarget
+        type="stacked-line"
       />
 
     </div>
