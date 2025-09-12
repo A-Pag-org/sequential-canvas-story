@@ -17,8 +17,9 @@ const performanceByCity = [
 
 const resolvedChartData = performanceByCity.map((c) => ({
   name: c.name,
-  target: c.targetResolved,
-  raised: c.actualResolved,
+  actualResolved: c.actualResolved,
+  targetResolved: c.targetResolved,
+  actualRaised: c.actualRaised,
 }));
 
 const totals = performanceByCity.reduce(
