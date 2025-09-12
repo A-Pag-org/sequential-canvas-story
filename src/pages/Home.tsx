@@ -1,6 +1,5 @@
-import { MetricCard } from "@/components/MetricCard";
 import { IssuesChart } from "@/components/IssuesChart";
-import { TrendingUp, CheckCircle } from "lucide-react";
+import { IssueStatCard } from "@/components/IssueStatCard";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
@@ -26,26 +25,33 @@ const resolvedChartData = performanceByCity.map((c) => ({
   raised: c.actualResolved,
 }));
 
+const totals = performanceByCity.reduce(
+  (acc, c) => {
+    acc.targetRaised += c.targetRaised;
+    acc.actualRaised += c.actualRaised;
+    acc.targetResolved += c.targetResolved;
+    acc.actualResolved += c.actualResolved;
+    return acc;
+  },
+  { targetRaised: 0, actualRaised: 0, targetResolved: 0, actualResolved: 0 }
+);
+
 const Home = () => {
   return (
     <div className="space-y-6">
-      {/* Metric Cards */}
+      {/* Summary Cards - DSP style */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        <MetricCard
+        <IssueStatCard
           title="Issues Raised"
-          value="197,103"
-          subtitle="Target Vs Actual"
-          icon={TrendingUp}
-          variant="warning"
-          trend={{ value: 0, isPositive: true }}
+          target={totals.targetRaised}
+          actual={totals.actualRaised}
+          variant="raised"
         />
-        <MetricCard
+        <IssueStatCard
           title="Issues Resolved"
-          value="148,232"
-          subtitle="Target Vs Actual"
-          icon={CheckCircle}
-          variant="success"
-          trend={{ value: 0, isPositive: true }}
+          target={totals.targetResolved}
+          actual={totals.actualResolved}
+          variant="resolved"
         />
       </div>
 
