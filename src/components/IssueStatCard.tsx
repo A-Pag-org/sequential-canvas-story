@@ -1,0 +1,56 @@
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+type Variant = "raised" | "resolved";
+
+interface IssueStatCardProps {
+  title: string;
+  target: number;
+  actual: number;
+  variant: Variant;
+  className?: string;
+}
+
+const bgByVariant: Record<Variant, string> = {
+  raised: "bg-yellow-300 text-black",
+  resolved: "bg-red-400 text-white",
+};
+
+export function IssueStatCard({ title, target, actual, variant, className }: IssueStatCardProps) {
+  const pct = target > 0 ? Math.round((actual / target) * 100) : 0;
+
+  return (
+    <Card className={cn("rounded-2xl p-5 md:p-6", bgByVariant[variant], className)}>
+      <div className="flex flex-col items-center gap-4">
+        <h3 className={cn("text-xl md:text-2xl font-semibold text-center")}>{title}</h3>
+
+        <div className="w-full grid grid-cols-3 items-center gap-2 md:gap-4">
+          {/* Left: Target */}
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-sm">
+              <span className="text-red-600 font-semibold text-sm md:text-base">{target.toLocaleString()}</span>
+            </div>
+            <span className="mt-2 text-sm md:text-base opacity-90">Target</span>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center justify-center h-full">
+            <div className={cn("w-px h-14 md:h-16", variant === "resolved" ? "bg-white/70" : "bg-black/40")} />
+          </div>
+
+          {/* Right: Actual */}
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center shadow-sm">
+              <span className="text-red-600 font-semibold text-sm md:text-base">{actual.toLocaleString()}</span>
+            </div>
+            <div className="mt-2 text-center">
+              <div className="text-sm md:text-base opacity-90">Actual</div>
+              <div className="text-sm md:text-base font-semibold">{pct}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
