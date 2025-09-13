@@ -141,14 +141,14 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
       {/* Agency Performance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
-          title="Active Agency"
+          title="Onboarded Agencies"
           value="8"
           subtitle="Issues raised Target Vs Actual : 92%"
           icon={Activity}
           variant="warning"
         />
         <MetricCard
-          title="Sluggish Agency"
+          title="In Active agency"
           value="3"
           subtitle="Issue Resolved Target Vs Actual : 67%"
           icon={Clock}
