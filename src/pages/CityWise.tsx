@@ -88,6 +88,14 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
     { key: "agency", label: "Agency" },
     { key: "issuesRaised", label: "Issues Raised", render: (value: number) => value.toLocaleString() },
     { key: "issueResolved", label: "Issue Resolved", render: (value: number) => value.toLocaleString() },
+    {
+      key: "pendencyPct",
+      label: "Pendency %",
+      render: (_: any, row: AgencyRow) => {
+        const pendency = ((row.issueResolved ?? 0) - (row.issuesRaised ?? 0)) / 100;
+        return `${pendency.toFixed(1)}%`;
+      },
+    },
   ];
 
   if (activeModule === "MRS") {
