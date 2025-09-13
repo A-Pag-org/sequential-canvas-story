@@ -65,7 +65,7 @@ const agenciesByCity: Record<string, AgencyRow[]> = {
   Noida: [
     { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
   ],
-  Bahadurghar: [
+  Bahadurgarh: [
     { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
   ],
 };

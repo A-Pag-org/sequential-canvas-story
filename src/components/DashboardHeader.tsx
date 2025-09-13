@@ -28,7 +28,7 @@ const mrsSections = [
 ];
 
 const cities = [
-  "Bahadurghar",
+  "Bahadurgarh",
   "Delhi",
   "Faridabad",
   "Ghaziadabad",
