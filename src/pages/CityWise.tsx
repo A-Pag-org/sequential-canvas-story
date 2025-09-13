@@ -65,7 +65,7 @@ const agenciesByCity: Record<string, AgencyRow[]> = {
   Noida: [
     { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
   ],
-  Bahadurghar: [
+  Bahadurgarh: [
     { id: 1, agency: "NA", issuesRaised: 0, issueResolved: 0 },
   ],
 };
@@ -88,6 +88,14 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
     { key: "agency", label: "Agency" },
     { key: "issuesRaised", label: "Issues Raised", render: (value: number) => value.toLocaleString() },
     { key: "issueResolved", label: "Issue Resolved", render: (value: number) => value.toLocaleString() },
+    {
+      key: "pendencyPct",
+      label: "Pendency",
+      render: (_: any, row: AgencyRow) => {
+        const pendency = ((row.issuesRaised ?? 0) - (row.issueResolved ?? 0)) / 100;
+        return `${pendency.toFixed(1)}%`;
+      },
+    },
   ];
 
   if (activeModule === "MRS") {
@@ -141,14 +149,14 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
       {/* Agency Performance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
-          title="Active Agency"
+          title="Onboarded Agencies"
           value="8"
           subtitle="Issues raised Target Vs Actual : 92%"
           icon={Activity}
           variant="warning"
         />
         <MetricCard
-          title="Sluggish Agency"
+          title="In Active agency"
           value="3"
           subtitle="Issue Resolved Target Vs Actual : 67%"
           icon={Clock}

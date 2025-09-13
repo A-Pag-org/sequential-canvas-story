@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const [activeModule, setActiveModule] = useState("DSP");
   const [activeSection, setActiveSection] = useState("home");
-  const [selectedCity, setSelectedCity] = useState("Bahadurghar");
+  const [selectedCity, setSelectedCity] = useState("Bahadurgarh");
 
   const handleModuleChange = (module: string) => {
     setActiveModule(module);

@@ -1,7 +1,7 @@
 import { IssuesChart } from "@/components/IssuesChart";
 import { IssueStatCard } from "@/components/IssueStatCard";
 import { MetricCard } from "@/components/MetricCard";
-import { Clock, Zap, Target } from "lucide-react";
+import { Target, Trophy, ArrowDownCircle } from "lucide-react";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
@@ -33,6 +33,17 @@ const totals = performanceByCity.reduce(
   { targetRaised: 0, actualRaised: 0, targetResolved: 0, actualResolved: 0 }
 );
 
+const resolutionRates = [
+  { name: "Baharudgarh", raised: 29 },
+  { name: "Delhi", raised: 75 },
+  { name: "Faridabad", raised: 80 },
+  { name: "Ghaziabad", raised: 86 },
+  { name: "Greater Noida", raised: 75 },
+  { name: "Gurgaon", raised: 67 },
+  { name: "Manesar", raised: 78 },
+  { name: "Noida", raised: 93 },
+];
+
 const Home = () => {
   return (
     <div className="space-y-6">
@@ -54,33 +65,46 @@ const Home = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
-          title="City with Fastest Issue Resolution"
+          title="Average Resolution Rate"
+          value="73%"
+          icon={Target}
+          variant="info"
+        />
+        <MetricCard
+          title="City with Highest Resolution Rate"
           value="Noida"
-          subtitle="Noida: 1.8 days avg"
-          icon={Zap}
+          subtitle="93%"
+          icon={Trophy}
           variant="success"
         />
         <MetricCard
-          title="City with Slowest Issue Resolution"
-          value="Ghaziabad"
-          subtitle="Ghaziabad: 5.2 days avg"
-          icon={Clock}
+          title="City with Lowest Resolution Rate"
+          value="Baharudgarh"
+          subtitle="29%"
+          icon={ArrowDownCircle}
           variant="danger"
-        />
-        <MetricCard
-          title="Average Issue Resolution Time by City"
-          value="3.4 days"
-          subtitle="Avg. Time across all cities"
-          icon={Target}
-          variant="info"
         />
       </div>
 
       {/* Issues Resolved Chart - Stacked with Line */}
       <IssuesChart
-        title="Issue Status by City - Stacked with Line"
+        title="Issue Status"
         data={resolvedChartData}
         type="stacked-line"
+      />
+
+      <IssuesChart
+        title="Actual Resolution Rate by City"
+        data={resolutionRates}
+        showTarget={false}
+        showLegend={false}
+        valueSuffix="%"
+        getBarFill={(entry) => {
+          const v = Number(entry.raised) || 0;
+          if (v > 90) return "hsl(var(--success))";
+          if (v >= 80 && v <= 90) return "hsl(var(--warning))";
+          return "hsl(var(--danger))";
+        }}
       />
 
     </div>
