@@ -241,14 +241,6 @@ const Performance = ({ activeModule }: PerformanceProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        <MetricCard
-          title="Issues Under 7 days"
-          value="34%"
-          variant="info"
-          trend={{ value: 12, isPositive: true }}
-        />
-      </div>
 
       <DataTable
         title="Issue Resolution Performance Details"
