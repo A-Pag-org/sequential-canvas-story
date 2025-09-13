@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
   LabelList,
+  Cell,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -29,9 +30,10 @@ interface IssuesChartProps {
   valueSuffix?: string;
   showLegend?: boolean;
   showPercentOfTarget?: boolean;
+  getBarFill?: (entry: any, index: number) => string;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false }: IssuesChartProps) => {
+export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill }: IssuesChartProps) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -121,6 +123,9 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
+                {getBarFill && data.map((entry, index) => (
+                  <Cell key={`cell-composed-${index}`} fill={getBarFill(entry, index)} />
+                ))}
                 <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>
               <Line
@@ -216,6 +221,9 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
+                {getBarFill && data.map((entry, index) => (
+                  <Cell key={`cell-default-${index}`} fill={getBarFill(entry, index)} />
+                ))}
                 <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>
             )}
