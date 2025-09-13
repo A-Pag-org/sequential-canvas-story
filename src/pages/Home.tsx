@@ -33,6 +33,17 @@ const totals = performanceByCity.reduce(
   { targetRaised: 0, actualRaised: 0, targetResolved: 0, actualResolved: 0 }
 );
 
+const resolutionRates = [
+  { name: "Baharudgarh", raised: 29 },
+  { name: "Delhi", raised: 75 },
+  { name: "Faridabad", raised: 80 },
+  { name: "Ghaziabad", raised: 86 },
+  { name: "Greater Noida", raised: 75 },
+  { name: "Gurgaon", raised: 67 },
+  { name: "Manesar", raised: 78 },
+  { name: "Noida", raised: 93 },
+];
+
 const Home = () => {
   return (
     <div className="space-y-6">
@@ -80,6 +91,20 @@ const Home = () => {
         title="Issue Status by City - Stacked with Line"
         data={resolvedChartData}
         type="stacked-line"
+      />
+
+      <IssuesChart
+        title="Actual Resolution Rate by City"
+        data={resolutionRates}
+        showTarget={false}
+        showLegend={false}
+        valueSuffix="%"
+        getBarFill={(entry) => {
+          const v = Number(entry.raised) || 0;
+          if (v > 90) return "hsl(var(--success))";
+          if (v >= 80 && v <= 90) return "hsl(var(--warning))";
+          return "hsl(var(--danger))";
+        }}
       />
 
     </div>
