@@ -53,23 +53,14 @@ const Home = () => {
           title="Actual Issues"
           target={totals.actualRaised}
           actual={totals.actualResolved}
-          variant="raised"
-        />
-        <IssueStatCard
-          title="Issues Resolved"
-          target={totals.targetResolved}
-          actual={totals.actualResolved}
           variant="resolved"
+          leftLabelText="Raised"
+          rightLabelText="Resolved"
+          subtitle="(Average Resolution Rate)"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard
-          title="Average Resolution Rate"
-          value="73%"
-          icon={Target}
-          variant="info"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MetricCard
           title="City with Highest Resolution Rate"
           value="Noida"
