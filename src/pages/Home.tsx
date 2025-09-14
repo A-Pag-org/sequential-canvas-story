@@ -1,7 +1,7 @@
 import { IssuesChart } from "@/components/IssuesChart";
 import { IssueStatCard } from "@/components/IssueStatCard";
 import { MetricCard } from "@/components/MetricCard";
-import { Target, Trophy, ArrowDownCircle } from "lucide-react";
+import { Trophy, ArrowDownCircle } from "lucide-react";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
