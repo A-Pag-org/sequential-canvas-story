@@ -10,6 +10,9 @@ interface IssueStatCardProps {
   actual: number;
   variant: Variant;
   className?: string;
+  leftLabelText?: string;
+  rightLabelText?: string;
+  subtitle?: string;
 }
 
 const bgByVariant: Record<Variant, string> = {
@@ -17,11 +20,11 @@ const bgByVariant: Record<Variant, string> = {
   resolved: "bg-red-400 text-white",
 };
 
-export function IssueStatCard({ title, target, actual, variant, className }: IssueStatCardProps) {
+export function IssueStatCard({ title, target, actual, variant, className, leftLabelText, rightLabelText, subtitle }: IssueStatCardProps) {
   const pct = target > 0 ? Math.round((actual / target) * 100) : 0;
 
-  const leftLabel = variant === "raised" ? "Raised" : "Target";
-  const rightLabel = variant === "raised" ? "Resolved" : "Actual";
+  const leftLabel = leftLabelText ?? (variant === "raised" ? "Raised" : "Target");
+  const rightLabel = rightLabelText ?? (variant === "raised" ? "Resolved" : "Actual");
 
   return (
     <Card className={cn("rounded-2xl p-5 md:p-6", bgByVariant[variant], className)}>
@@ -51,8 +54,9 @@ export function IssueStatCard({ title, target, actual, variant, className }: Iss
           </div>
         </div>
 
-        {variant === "raised" && (
-          <div className="mt-2 text-center text-base md:text-lg font-semibold">{pct}%</div>
+        <div className="mt-2 text-center text-base md:text-lg font-semibold">{pct}%</div>
+        {subtitle && (
+          <div className="mt-1 text-center text-xs md:text-sm opacity-80">{subtitle}</div>
         )}
       </div>
     </Card>

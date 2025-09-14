@@ -1,7 +1,7 @@
 import { IssuesChart } from "@/components/IssuesChart";
 import { IssueStatCard } from "@/components/IssueStatCard";
 import { MetricCard } from "@/components/MetricCard";
-import { Target, Trophy, ArrowDownCircle } from "lucide-react";
+import { Trophy, ArrowDownCircle } from "lucide-react";
 
 // Data for charts (Target vs Actual) as provided
 const performanceByCity = [
@@ -53,23 +53,14 @@ const Home = () => {
           title="Actual Issues"
           target={totals.actualRaised}
           actual={totals.actualResolved}
-          variant="raised"
-        />
-        <IssueStatCard
-          title="Issues Resolved"
-          target={totals.targetResolved}
-          actual={totals.actualResolved}
           variant="resolved"
+          leftLabelText="Raised"
+          rightLabelText="Resolved"
+          subtitle="(Average Resolution Rate)"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard
-          title="Average Resolution Rate"
-          value="73%"
-          icon={Target}
-          variant="info"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MetricCard
           title="City with Highest Resolution Rate"
           value="Noida"
