@@ -201,7 +201,8 @@ const Performance = ({ activeModule }: PerformanceProps) => {
           type="bar"
           showTarget={false}
           valueSuffix="%"
-          showLegend={false}
+          showLegend={true}
+          orientation="horizontal"
         />
 
         <IssuesChart
@@ -210,7 +211,8 @@ const Performance = ({ activeModule }: PerformanceProps) => {
           type="bar"
           showTarget={false}
           valueSuffix="%"
-          showLegend={false}
+          showLegend={true}
+          orientation="horizontal"
         />
       </div>
     );
