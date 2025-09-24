@@ -19,33 +19,37 @@ interface ChartDataPoint {
   raised?: number;
   resolved?: number;
   target?: number;
+  actualResolved?: number;
+  actualRaised?: number;
+  targetResolved?: number;
 }
 
-interface IssuesChartProps {
+interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
   title: string;
-  data: any[];
+  data: TEntry[];
   type?: "bar" | "composed" | "stacked-line";
   showTarget?: boolean;
   showActual?: boolean;
   valueSuffix?: string;
   showLegend?: boolean;
   showPercentOfTarget?: boolean;
-  getBarFill?: (entry: any, index: number) => string;
+  getBarFill?: (entry: TEntry, index: number) => string;
 }
 
-export const IssuesChart = ({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill }: IssuesChartProps) => {
+export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
   const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
       let pct: number | undefined;
       if (type === "stacked-line") {
-        const num = payload.find((p: any) => p.dataKey === "actualResolved")?.value as number | undefined;
-        const den = payload.find((p: any) => p.dataKey === "actualRaised")?.payload?.actualRaised as number | undefined;
+        const num = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
+        const den = payload.find((p) => p.dataKey === "actualRaised")?.payload?.actualRaised as number | undefined;
         if (typeof num === "number" && typeof den === "number" && den > 0) pct = Math.round((num / den) * 100);
       } else {
-        const targetEntry = payload.find((p: any) => p.dataKey === 'target');
-        const actualEntry = payload.find((p: any) => p.dataKey === 'raised');
+        const targetEntry = payload.find((p) => p.dataKey === 'target');
+        const actualEntry = payload.find((p) => p.dataKey === 'raised');
         const targetVal = targetEntry?.value as number | undefined;
         const actualVal = actualEntry?.value as number | undefined;
         pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
@@ -56,7 +60,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="font-medium mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
               {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
               {pct != null && entry.dataKey === 'actualResolved' ? ` (${pct}%)` : ""}
@@ -68,7 +72,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
     return null;
   };
 
-  const BarValueLabel = (props: any) => {
+  const BarValueLabel = (props: { x?: number; y?: number; width?: number; value?: number | string }) => {
     const { x, y, width, value } = props;
     if (value == null) return null;
     const posX = (x || 0) + (width || 0) / 2;
@@ -124,7 +128,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 isAnimationActive={!isMobile}
               >
                 {getBarFill && data.map((entry, index) => (
-                  <Cell key={`cell-composed-${index}`} fill={getBarFill(entry, index)} />
+                  <Cell key={`cell-composed-${index}`} fill={getBarFill(entry as TEntry, index)} />
                 ))}
                 <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>
@@ -222,7 +226,7 @@ export const IssuesChart = ({ title, data, type = "bar", showTarget = true, show
                 isAnimationActive={!isMobile}
               >
                 {getBarFill && data.map((entry, index) => (
-                  <Cell key={`cell-default-${index}`} fill={getBarFill(entry, index)} />
+                  <Cell key={`cell-default-${index}`} fill={getBarFill(entry as TEntry, index)} />
                 ))}
                 <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
               </Bar>

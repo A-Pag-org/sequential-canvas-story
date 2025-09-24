@@ -83,7 +83,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
     {
       key: "srNo",
       label: "Sr.No.",
-      render: (_: any, row: any) => (agencyTableData.findIndex(item => item.id === row.id) + 1)
+      render: (_: unknown, row: AgencyRow) => (agencyTableData.findIndex(item => item.id === row.id) + 1)
     },
     { key: "agency", label: "Agency" },
     { key: "issuesRaised", label: "Issues Raised", render: (value: number) => value.toLocaleString() },
@@ -91,7 +91,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
     {
       key: "pendencyPct",
       label: "Pendency",
-      render: (_: any, row: AgencyRow) => {
+      render: (_: unknown, row: AgencyRow) => {
         const pendency = ((row.issuesRaised ?? 0) - (row.issueResolved ?? 0)) / 100;
         return `${pendency.toFixed(1)}%`;
       },
