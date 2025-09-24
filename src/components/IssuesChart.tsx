@@ -38,7 +38,7 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
 
 export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
-  const xTickProps = isMobile ? { angle: -55 as const, textAnchor: "end" as const } : { angle: -35 as const, textAnchor: "end" as const };
+  const xTickProps = { angle: 0 as const, textAnchor: "middle" as const };
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
@@ -110,6 +110,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       const pct = Math.round((resolved / raised) * 100);
       const posX = (x || 0) + (width || 0) / 2;
       const posY = (y || 0) + 14; // inside the bar, near the top
+      const fillColor = getResolvedFill(payload as TEntry);
+      const textFill = fillColor === '#FFC107' ? '#111827' : '#ffffff';
       return (
         <text
           x={posX}
@@ -117,7 +119,10 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           textAnchor="middle"
           fontSize={12}
           fontWeight={700}
-          fill="#ffffff"
+          fill={textFill}
+          stroke="#000000"
+          strokeWidth={0.6}
+          style={{ paintOrder: 'stroke' as const }}
         >
           {pct}%
         </text>
@@ -133,11 +138,11 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
             <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
               <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
-              <Bar dataKey="actualRaised" name="Actual Raised" fill="#000000" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+              <Bar dataKey="actualRaised" name="Actual Raised" fill="#9CA3AF" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
               </Bar>
               <Bar dataKey="actualResolved" name="Actual Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
@@ -187,6 +192,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 fontWeight={500}
                 interval={0}
                 tick={xTickProps}
+                tickMargin={isMobile ? 12 : 16}
               />
               <YAxis
                 stroke="hsl(var(--muted-foreground))"
@@ -237,7 +243,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
             <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
               <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
@@ -269,6 +275,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               fontWeight={500}
               interval={0}
               tick={xTickProps}
+              tickMargin={isMobile ? 12 : 16}
             />
             <YAxis
                 stroke="hsl(var(--muted-foreground))"
