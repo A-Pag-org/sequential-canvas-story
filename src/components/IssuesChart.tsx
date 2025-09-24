@@ -109,7 +109,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       if (!raised) return null;
       const pct = Math.round((resolved / raised) * 100);
       const posX = (x || 0) + (width || 0) / 2;
-      const posY = (y || 0) - 22; // slightly above the absolute value label
+      const posY = (y || 0) + 14; // inside the bar, near the top
       return (
         <text
           x={posX}
@@ -117,7 +117,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           textAnchor="middle"
           fontSize={12}
           fontWeight={700}
-          fill="hsl(var(--muted-foreground))"
+          fill="#ffffff"
         >
           {pct}%
         </text>
@@ -149,6 +149,21 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
+          {/* Color legend for Actual Resolved thresholds */}
+          <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
+              <span>{'> 90% Resolved'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
+              <span>{'80% - 90% Resolved'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
+              <span>{'< 80% Resolved'}</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
     );
