@@ -138,15 +138,16 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       return getDspThresholdFill(pct);
     };
 
-    const PercentLabel = (props: { x?: number; y?: number; width?: number; value?: number; payload?: TEntry }) => {
-      const { x, y, width, payload } = props;
-      const resolved = Number((payload as any)?.actualResolved) || 0;
-      const raised = Number((payload as any)?.actualRaised) || 0;
+    const PercentLabel = (props: { x?: number; y?: number; width?: number; index?: number }) => {
+      const { x, y, width, index } = props;
+      const record = (index != null ? data[index] : undefined) as any;
+      const resolved = Number(record?.actualResolved) || 0;
+      const raised = Number(record?.actualRaised) || 0;
       if (!raised) return null;
       const pct = Math.round((resolved / raised) * 100);
       const posX = (x || 0) + (width || 0) / 2;
       const posY = (y || 0) + 14; // inside the bar, near the top
-      const fillColor = getResolvedFill(payload as TEntry);
+      const fillColor = getDspThresholdFill(pct);
       const textFill = fillColor === '#FFC107' ? '#111827' : '#ffffff';
       return (
         <text
