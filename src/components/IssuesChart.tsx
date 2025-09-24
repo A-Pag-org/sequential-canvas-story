@@ -34,11 +34,13 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
   showLegend?: boolean;
   showPercentOfTarget?: boolean;
   getBarFill?: (entry: TEntry, index: number) => string;
+  orientation?: "vertical" | "horizontal";
 }
 
-export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill }: IssuesChartProps<TEntry>) => {
+export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical" }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
   const xTickProps = { angle: 0 as const, textAnchor: "middle" as const };
+  const isHorizontal = orientation === "horizontal" || (!!valueSuffix && valueSuffix.includes("%") && showActual && !showTarget && type === "bar");
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
@@ -87,6 +89,34 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
         fill="hsl(var(--foreground))"
       >
         {Number(value).toLocaleString()}{valueSuffix ?? ""}
+      </text>
+    );
+  };
+
+  const BarInsideLabel = (props: { x?: number; y?: number; width?: number; height?: number; value?: number | string }) => {
+    const { x, y, width, height, value } = props;
+    if (value == null) return null;
+    const numeric = Number(value);
+    const label = `${numeric.toLocaleString()}${valueSuffix ?? ""}`;
+    const barWidth = width || 0;
+    const threshold = 36; // px width threshold to decide inside vs outside
+    const isInside = barWidth > threshold;
+    const posY = (y || 0) + (height || 0) / 2 + 1;
+    const posX = isInside ? (x || 0) + barWidth - 6 : (x || 0) + barWidth + 6;
+    return (
+      <text
+        x={posX}
+        y={posY}
+        textAnchor={isInside ? "end" : "start"}
+        dominantBaseline="middle"
+        fontSize={12}
+        fontWeight={700}
+        fill={isInside ? "#ffffff" : "hsl(var(--foreground))"}
+        stroke={isInside ? "#000000" : "none"}
+        strokeWidth={isInside ? 0.6 : 0}
+        style={isInside ? ({ paintOrder: 'stroke' as const }) : undefined}
+      >
+        {label}
       </text>
     );
   };
@@ -266,24 +296,49 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
-          <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+          <ComposedChart data={data} layout={isHorizontal ? 'vertical' : 'horizontal'} margin={{ top: (isHorizontal ? 24 : (isMobile ? 56 : 40)), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isHorizontal ? 24 : (isMobile ? 64 : 56)) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis
-              dataKey="name"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              fontWeight={500}
-              interval={0}
-              tick={xTickProps}
-              tickMargin={isMobile ? 12 : 16}
-            />
-            <YAxis
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                fontWeight={500}
-                domain={[0, 'dataMax + 10']}
-                tickCount={6}
-              />
+            {isHorizontal ? (
+              <>
+                <XAxis
+                  type="number"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  fontWeight={500}
+                  domain={[0, 'dataMax + 10']}
+                  tickCount={6}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  fontWeight={500}
+                  interval={0}
+                  tickMargin={8}
+                  width={isMobile ? 112 : 196}
+                />
+              </>
+            ) : (
+              <>
+                <XAxis
+                  dataKey="name"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  fontWeight={500}
+                  interval={0}
+                  tick={xTickProps}
+                  tickMargin={isMobile ? 12 : 16}
+                />
+                <YAxis
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    fontWeight={500}
+                    domain={[0, 'dataMax + 10']}
+                    tickCount={6}
+                  />
+              </>
+            )}
             <Tooltip content={<CustomTooltip />} />
             {showLegend && (
               <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
@@ -293,12 +348,12 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 dataKey="target"
                 name="Target"
                 fill="hsl(var(--chart-3))"
-                radius={[6, 6, 0, 0]}
+                radius={isHorizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]}
                 opacity={0.8}
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
-                <LabelList dataKey="target" position="top" content={<BarValueLabel />} />
+                <LabelList dataKey="target" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
               </Bar>
             )}
             {showActual && (
@@ -306,14 +361,14 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 dataKey="raised"
                 name="Actual"
                 fill="hsl(var(--chart-2))"
-                radius={[6, 6, 0, 0]}
+                radius={isHorizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]}
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
                 {getBarFill && data.map((entry, index) => (
                   <Cell key={`cell-default-${index}`} fill={getBarFill(entry as TEntry, index)} />
                 ))}
-                <LabelList dataKey="raised" position="top" content={<BarValueLabel />} />
+                <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
               </Bar>
             )}
           </ComposedChart>
