@@ -12,27 +12,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface TableColumn {
+interface TableColumn<TRow extends Record<string, unknown>> {
   key: string;
   label: string;
-  render?: (value: any, row: any) => React.ReactNode;
+  render?: (value: unknown, row: TRow) => React.ReactNode;
   headerClassName?: string;
   cellClassName?: string;
 }
 
-interface DataTableProps {
+interface DataTableProps<TRow extends Record<string, unknown>> {
   title?: string;
-  columns: TableColumn[];
-  data: any[];
+  columns: TableColumn<TRow>[];
+  data: TRow[];
   expandable?: boolean;
   onRowExpand?: (rowId: string | number) => void;
-  renderExpanded?: (row: any) => React.ReactNode;
+  renderExpanded?: (row: TRow) => React.ReactNode;
   eyeInCity?: boolean;
   eyeColumnKey?: string;
   singleExpand?: boolean;
 }
 
-export const DataTable = ({
+export const DataTable = <TRow extends Record<string, unknown>>({
   title,
   columns,
   data,
@@ -42,7 +42,7 @@ export const DataTable = ({
   eyeInCity = false,
   eyeColumnKey,
   singleExpand = false,
-}: DataTableProps) => {
+}: DataTableProps<TRow>) => {
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
 
   const toggleRow = (rowId: string | number) => {
@@ -87,7 +87,8 @@ export const DataTable = ({
           </TableHeader>
           <TableBody>
             {data.map((row, index) => {
-              const rowId = row.id || index;
+              const maybeId = (row as { id?: string | number }).id;
+              const rowId = maybeId ?? index;
               const isExpanded = expandedRows.has(rowId);
               
               return (
@@ -122,7 +123,7 @@ export const DataTable = ({
                     <TableCell key={column.key} className={cn("font-medium", column.cellClassName)}>
                       {eyeInCity && column.key === (eyeColumnKey || "city") ? (
                         <div className="flex items-center gap-2">
-                          <span>{row[column.key] || "-"}</span>
+                          <span>{(row as Record<string, unknown>)[column.key] as React.ReactNode || "-"}</span>
                           <Button
                             variant="ghost"
                             size="sm"
@@ -138,7 +139,7 @@ export const DataTable = ({
                         // Gate selected columns until expanded when using eyeInCity
                         (eyeInCity && ["agency", "turnAroundTime", "fastestCity", "slowestCity", "avgTimeTaken"].includes(column.key) && !isExpanded)
                           ? <span>-</span>
-                          : (column.render ? column.render(row[column.key], row) : <span>{row[column.key] || "-"}</span>)
+                          : (column.render ? column.render((row as Record<string, unknown>)[column.key], row) : <span>{(row as Record<string, unknown>)[column.key] as React.ReactNode || "-"}</span>)
                       )}
                     </TableCell>
                   ))}

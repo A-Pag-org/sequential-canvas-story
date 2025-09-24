@@ -121,13 +121,14 @@ const performanceTableData = [
 ];
 
 const Performance = ({ activeModule }: PerformanceProps) => {
+  type PerformanceRow = typeof performanceTableData[number];
   const performanceColumns = [
     {
       key: "srNo",
       label: "Sr.No.",
       headerClassName: "w-14 text-center",
       cellClassName: "w-14 text-center",
-      render: (_: any, row: any) => (performanceTableData.findIndex(item => item.id === row.id) + 1)
+      render: (_: unknown, row: PerformanceRow) => (performanceTableData.findIndex(item => item.id === row.id) + 1)
     },
     {
       key: "issueType",
