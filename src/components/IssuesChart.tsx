@@ -178,7 +178,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
               <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
-              <Bar dataKey="actualRaised" name="Actual Raised" fill="#9CA3AF" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+              <Bar dataKey="actualRaised" name="Actual Raised" fill="#555555" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
               </Bar>
               <Bar dataKey="actualResolved" name="Actual Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>

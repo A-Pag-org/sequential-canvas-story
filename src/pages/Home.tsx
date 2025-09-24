@@ -44,6 +44,8 @@ const resolutionRates = [
   { name: "Noida", raised: 93 },
 ];
 
+const resolutionRatesSorted = [...resolutionRates].sort((a, b) => b.raised - a.raised);
+
 const Home = () => {
   return (
     <div className="space-y-6">
@@ -83,7 +85,7 @@ const Home = () => {
 
       <IssuesChart
         title="Actual Resolution Rate by City"
-        data={resolutionRates}
+        data={resolutionRatesSorted}
         showTarget={false}
         showLegend={true}
         valueSuffix="%"
