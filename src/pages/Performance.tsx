@@ -159,6 +159,8 @@ const Performance = ({ activeModule }: PerformanceProps) => {
       { city: "Noida", percent: 64 },
     ];
 
+    const cityPercentsSorted = [...cityPercents].sort((a, b) => b.percent - a.percent);
+
     const best = cityPercents.reduce((a, b) => (b.percent > a.percent ? b : a));
     const lagging = cityPercents.reduce((a, b) => (b.percent < a.percent ? b : a));
     const overall = 38; // Overall Avg
@@ -207,7 +209,7 @@ const Performance = ({ activeModule }: PerformanceProps) => {
 
         <IssuesChart
           title="Malba (collected/target)"
-          data={cityPercents.map(c => ({ name: c.city, raised: c.percent }))}
+          data={cityPercentsSorted.map(c => ({ name: c.city, raised: c.percent }))}
           type="bar"
           showTarget={false}
           valueSuffix="%"
