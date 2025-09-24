@@ -138,16 +138,20 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       return getDspThresholdFill(pct);
     };
 
-    const PercentLabel = (props: { x?: number; y?: number; width?: number; value?: number; payload?: TEntry }) => {
-      const { x, y, width, payload } = props;
+    const PercentLabel = (props: { x?: number; y?: number; width?: number; height?: number; value?: number; payload?: TEntry }) => {
+      const { x, y, width, height, payload } = props;
       const resolved = Number((payload as any)?.actualResolved) || 0;
       const raised = Number((payload as any)?.actualRaised) || 0;
       if (!raised) return null;
       const pct = Math.round((resolved / raised) * 100);
+      const barHeight = height || 0;
+      const isInside = barHeight >= 18; // readable threshold
       const posX = (x || 0) + (width || 0) / 2;
-      const posY = (y || 0) + 14; // inside the bar, near the top
+      const posY = isInside ? (y || 0) + 14 : (y || 0) - 6; // inside when tall, above when short
       const fillColor = getResolvedFill(payload as TEntry);
-      const textFill = fillColor === '#FFC107' ? '#111827' : '#ffffff';
+      const textFill = isInside
+        ? (fillColor === '#FFC107' ? '#111827' : '#ffffff')
+        : 'hsl(var(--foreground))';
       return (
         <text
           x={posX}
@@ -156,9 +160,9 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           fontSize={12}
           fontWeight={700}
           fill={textFill}
-          stroke="#000000"
-          strokeWidth={0.6}
-          style={{ paintOrder: 'stroke' as const }}
+          stroke={isInside ? '#000000' : 'none'}
+          strokeWidth={isInside ? 0.6 : 0}
+          style={isInside ? ({ paintOrder: 'stroke' as const }) : undefined}
         >
           {pct}%
         </text>
