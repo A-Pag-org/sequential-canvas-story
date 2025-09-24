@@ -27,7 +27,7 @@ interface ChartDataPoint {
 interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
   title: string;
   data: TEntry[];
-  type?: "bar" | "composed" | "stacked-line";
+  type?: "bar" | "composed" | "stacked-line" | "double";
   showTarget?: boolean;
   showActual?: boolean;
   valueSuffix?: string;
@@ -43,7 +43,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
       let pct: number | undefined;
-      if (type === "stacked-line") {
+      if (type === "stacked-line" || type === "double") {
         const num = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
         const den = payload.find((p) => p.dataKey === "actualRaised")?.payload?.actualRaised as number | undefined;
         if (typeof num === "number" && typeof den === "number" && den > 0) pct = Math.round((num / den) * 100);
@@ -90,6 +90,69 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       </text>
     );
   };
+
+
+  if (type === "double") {
+    const getResolvedFill = (entry: TEntry) => {
+      const numerator = Number((entry as any).actualResolved) || 0;
+      const denominator = Number((entry as any).actualRaised) || 0;
+      const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
+      if (pct > 90) return "#4CAF50"; // Green
+      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
+      return "#F44336"; // Red
+    };
+
+    const PercentLabel = (props: { x?: number; y?: number; width?: number; value?: number; payload?: TEntry }) => {
+      const { x, y, width, payload } = props;
+      const resolved = Number((payload as any)?.actualResolved) || 0;
+      const raised = Number((payload as any)?.actualRaised) || 0;
+      if (!raised) return null;
+      const pct = Math.round((resolved / raised) * 100);
+      const posX = (x || 0) + (width || 0) / 2;
+      const posY = (y || 0) - 22; // slightly above the absolute value label
+      return (
+        <text
+          x={posX}
+          y={posY}
+          textAnchor="middle"
+          fontSize={12}
+          fontWeight={700}
+          fill="hsl(var(--muted-foreground))"
+        >
+          {pct}%
+        </text>
+      );
+    };
+
+    return (
+      <Card className="chart-container animate-card-enter">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
+            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
+              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
+              <Bar dataKey="actualRaised" name="Actual Raised" fill="#000000" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+                <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
+              </Bar>
+              <Bar dataKey="actualResolved" name="Actual Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+                {data.map((entry, index) => (
+                  <Cell key={`cell-double-${index}`} fill={getResolvedFill(entry as TEntry)} />
+                ))}
+                <LabelList dataKey="actualResolved" position="top" content={<BarValueLabel />} />
+                <LabelList dataKey="actualResolved" position="top" content={<PercentLabel />} />
+              </Bar>
+            </ComposedChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    );
+  }
 
 
   if (type === "composed") {
