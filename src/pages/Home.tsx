@@ -85,14 +85,9 @@ const Home = () => {
         title="Actual Resolution Rate by City"
         data={resolutionRates}
         showTarget={false}
-        showLegend={false}
+        showLegend={true}
         valueSuffix="%"
-        getBarFill={(entry) => {
-          const v = Number(entry.raised) || 0;
-          if (v > 90) return "hsl(var(--success))";
-          if (v >= 80 && v <= 90) return "hsl(var(--warning))";
-          return "hsl(var(--danger))";
-        }}
+        orientation="horizontal"
       />
 
     </div>

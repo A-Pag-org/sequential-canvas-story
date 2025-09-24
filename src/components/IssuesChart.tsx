@@ -41,6 +41,14 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   const isMobile = useIsMobile();
   const xTickProps = { angle: 0 as const, textAnchor: "middle" as const };
   const isHorizontal = orientation === "horizontal" || (!!valueSuffix && valueSuffix.includes("%") && showActual && !showTarget && type === "bar");
+  const isPercentOnly = !!valueSuffix && valueSuffix.includes('%') && showActual && !showTarget && type === 'bar';
+
+  const getDspThresholdFill = (value: number) => {
+    if (value >= 90) return '#4CAF50'; // Satisfactory
+    if (value >= 50) return '#FFC107'; // Average
+    return '#F44336'; // Unsatisfactory
+  };
+
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
@@ -127,9 +135,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       const numerator = Number((entry as any).actualResolved) || 0;
       const denominator = Number((entry as any).actualRaised) || 0;
       const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
-      if (pct > 90) return "#4CAF50"; // Green
-      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
-      return "#F44336"; // Red
+      return getDspThresholdFill(pct);
     };
 
     const PercentLabel = (props: { x?: number; y?: number; width?: number; value?: number; payload?: TEntry }) => {
@@ -184,19 +190,19 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          {/* Color legend for Actual Resolved thresholds */}
+          {/* DSP Color legend */}
           <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'> 90% Resolved'}</span>
+              <span>{'Satisfactory (>= 90%)'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'80% - 90% Resolved'}</span>
+              <span>{'Average (50% - 89%)'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'< 80% Resolved'}</span>
+              <span>{'Unsatisfactory (< 50%)'}</span>
             </div>
           </div>
         </CardContent>
@@ -365,14 +371,30 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
-                {getBarFill && data.map((entry, index) => (
-                  <Cell key={`cell-default-${index}`} fill={getBarFill(entry as TEntry, index)} />
+                {(getBarFill || isPercentOnly) && data.map((entry, index) => (
+                  <Cell key={`cell-default-${index}`} fill={(getBarFill ? getBarFill(entry as TEntry, index) : getDspThresholdFill(Number((entry as any).raised) || 0))} />
                 ))}
                 <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
               </Bar>
             )}
           </ComposedChart>
         </ResponsiveContainer>
+        {isPercentOnly && (
+          <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
+              <span>{'Satisfactory (>= 90%)'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
+              <span>{'Average (50% - 89%)'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
+              <span>{'Unsatisfactory (< 50%)'}</span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
