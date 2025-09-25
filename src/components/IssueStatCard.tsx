@@ -27,8 +27,8 @@ export function IssueStatCard({ title, target, actual, variant, className, leftL
   const rightLabel = rightLabelText ?? (variant === "raised" ? "Resolved" : "Actual");
 
   return (
-    <Card className={cn("rounded-2xl p-5 md:p-6", bgByVariant[variant], className)}>
-      <div className="flex flex-col items-center gap-4">
+    <Card className={cn("rounded-2xl p-5 md:p-6 h-full", bgByVariant[variant], className)}>
+      <div className="flex flex-col h-full items-center gap-4">
         <h3 className={cn("text-xl md:text-2xl font-semibold text-center")}>{title}</h3>
 
         <div className="w-full grid grid-cols-3 items-center gap-2 md:gap-4">
@@ -54,10 +54,12 @@ export function IssueStatCard({ title, target, actual, variant, className, leftL
           </div>
         </div>
 
-        <div className="mt-2 text-center text-base md:text-lg font-semibold">{pct}%</div>
-        {subtitle && (
-          <div className="mt-1 text-center text-xs md:text-sm opacity-80">{subtitle}</div>
-        )}
+        <div className="mt-auto w-full flex flex-col items-center">
+          <div className="percent-emphasis">{pct}%</div>
+          {subtitle && (
+            <div className="mt-1 text-center text-xs md:text-sm opacity-80">{subtitle}</div>
+          )}
+        </div>
       </div>
     </Card>
   );
