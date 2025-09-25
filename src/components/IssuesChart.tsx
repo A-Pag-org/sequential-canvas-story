@@ -35,10 +35,9 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
   showPercentOfTarget?: boolean;
   getBarFill?: (entry: TEntry, index: number) => string;
   orientation?: "vertical" | "horizontal";
-  showDSPResolutionLegend?: boolean;
 }
 
-export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical", showDSPResolutionLegend = false }: IssuesChartProps<TEntry>) => {
+export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical" }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
   const isHorizontal = orientation === "horizontal";
   const maxNameLength = Array.isArray(data) && data.length > 0
@@ -98,20 +97,13 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
-      // DSP CityWise: If the data point includes actualRaised (denominator) and raised (numerator=resolved),
-      // show Issue Type, Raised count, Resolved count (percentage), Status
-      const basePayload = payload[0];
-      const entryPayload: any = basePayload?.payload ?? {};
-      const hasResolvedContext = typeof entryPayload?.actualRaised === 'number' && typeof entryPayload?.raised === 'number';
-      const hasRaisedChartContext = typeof entryPayload?.actualRaised === 'number' && typeof entryPayload?.actualResolved === 'number';
-
       let pct: number | undefined;
       if (type === "stacked-line" || type === "double") {
         const num = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
         const denEntry = payload.find((p) => p.dataKey === "actualRaised");
         const den = typeof denEntry?.payload?.actualRaised === 'number' ? denEntry.payload.actualRaised as number : undefined;
         if (typeof num === "number" && typeof den === "number" && den > 0) pct = Math.round((num / den) * 100);
-      } else if (!hasResolvedContext) {
+      } else {
         const targetEntry = payload.find((p) => p.dataKey === 'target');
         const actualEntry = payload.find((p) => p.dataKey === 'raised');
         const targetVal = targetEntry?.value as number | undefined;
@@ -119,22 +111,6 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
         pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
           ? Math.round((actualVal / targetVal) * 100)
           : undefined;
-      }
-
-      if (hasResolvedContext || hasRaisedChartContext) {
-        const issueType = String(entryPayload?.name ?? label ?? '');
-        const totalRaised = Number(entryPayload.actualRaised ?? 0) || 0;
-        const totalResolved = Number((hasResolvedContext ? entryPayload.raised : entryPayload.actualResolved) ?? 0) || 0;
-        const computedPct = totalRaised > 0 ? Math.round((totalResolved / totalRaised) * 100) : 0;
-        const status = computedPct >= 90 ? 'Satisfactory' : (computedPct >= 50 ? 'Average' : 'Unsatisfactory');
-        return (
-          <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-            <p className="font-medium mb-2">{issueType}</p>
-            <p className="text-sm">Raised: {totalRaised.toLocaleString()}</p>
-            <p className="text-sm">Resolved: {totalResolved.toLocaleString()} ({computedPct}%)</p>
-            <p className="text-sm">Status: {status}</p>
-          </div>
-        );
       }
 
       return (
@@ -199,66 +175,14 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
     );
   };
 
-  // Label for resolved bars in CityWise: show value and percentage centered in bar.
-  const ResolvedCenterLabel = (props: { x?: number; y?: number; width?: number; height?: number; value?: number | string; index?: number }) => {
-    const { x = 0, y = 0, width = 0, height = 0, value, index } = props;
-    if (value == null || index == null) return null;
-    const record = (data[index] as any) || {};
-    const totalRaised: number = Number(record?.actualRaised ?? 0) || 0;
-    const resolved: number = Number(value) || 0;
-    const pct: number | undefined = totalRaised > 0 ? Math.round((resolved / totalRaised) * 100) : undefined;
-
-    const label = pct != null ? `${resolved.toLocaleString()} (${pct}%)` : `${resolved.toLocaleString()}`;
-
-    // Determine if text can fit inside based on bar thickness
-    const thickness = isHorizontal ? height : width;
-    const fitsInside = thickness >= 18; // px threshold for legibility
-
-    // Positioning: center inside bar if fits; otherwise above the bar
-    const centerX = x + width / 2;
-    const centerY = y + height / 2;
-    const outsideY = y - 6;
-    const posX = centerX;
-    const posY = fitsInside ? centerY : outsideY;
-
-    // Choose text color for contrast if inside; default foreground if outside
-    let textFill = "hsl(var(--foreground))";
-    let strokeFill = "none";
-    let strokeWidth = 0;
-    if (fitsInside) {
-      // Try to derive fill color either from getBarFill or from percentage thresholds
-      const computedFill = (getBarFill ? getBarFill(data[index] as TEntry, index) : undefined) || (pct != null ? (pct >= 90 ? '#4CAF50' : pct >= 50 ? '#FFC107' : '#F44336') : undefined) || '#4A4A4A';
-      textFill = computedFill === '#FFC107' ? '#111827' : '#ffffff';
-      strokeFill = '#000000';
-      strokeWidth = 0.6;
-    }
-
-    return (
-      <text
-        x={posX}
-        y={posY}
-        textAnchor="middle"
-        dominantBaseline={fitsInside ? "middle" : "auto"}
-        fontSize={12}
-        fontWeight={700}
-        fill={textFill}
-        stroke={strokeFill}
-        strokeWidth={strokeWidth}
-        style={fitsInside ? ({ paintOrder: 'stroke' as const }) : undefined}
-      >
-        {label}
-      </text>
-    );
-  };
-
 
   if (type === "double") {
     const getResolvedFill = (entry: TEntry) => {
       const numerator = Number((entry as { actualResolved?: number }).actualResolved ?? 0) || 0;
       const denominator = Number((entry as { actualRaised?: number }).actualRaised ?? 0) || 0;
       const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
-      if (pct >= 90) return "#4CAF50"; // Green
-      if (pct >= 50 && pct <= 89) return "#FFC107"; // Amber
+      if (pct > 90) return "#4CAF50"; // Green
+      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
       return "#F44336"; // Red
     };
 
@@ -302,14 +226,15 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="actualRaised" name="Actual Raised" fill="#4A4A4A" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+              <Bar dataKey="actualRaised" name="Actual Raised" fill="#555555" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
               </Bar>
               <Bar dataKey="actualResolved" name="Actual Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 {data.map((entry, index) => (
                   <Cell key={`cell-double-${index}`} fill={getResolvedFill(entry as TEntry)} />
                 ))}
-                <LabelList dataKey="actualResolved" position="top" content={<ResolvedCenterLabel />} />
+                <LabelList dataKey="actualResolved" position="top" content={<BarValueLabel />} />
+                <LabelList dataKey="actualResolved" position="top" content={<PercentLabel />} />
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
@@ -484,34 +409,24 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 {getBarFill && data.map((entry, index) => (
                   <Cell key={`cell-default-${index}`} fill={getBarFill(entry as TEntry, index)} />
                 ))}
-                {(() => {
-                  const hasResolvedDenominator = isHorizontal && data.some((d) => typeof (d as any)?.actualRaised === 'number');
-                  if (hasResolvedDenominator) {
-                    return (
-                      <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={<ResolvedCenterLabel />} />
-                    );
-                  }
-                  return (
-                    <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
-                  );
-                })()}
+                <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
               </Bar>
             )}
           </ComposedChart>
         </ResponsiveContainer>
-        {showDSPResolutionLegend && (
+        {isPercentOnly && (
           <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'Satisfactory – ≥90%'}</span>
+              <span>{'> 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'Average – 50–89%'}</span>
+              <span>{'80% - 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'Unsatisfactory – <50%'}</span>
+              <span>{'< 80% Resolved'}</span>
             </div>
           </div>
         )}
