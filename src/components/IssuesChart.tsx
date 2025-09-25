@@ -40,7 +40,7 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
 export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical" }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
   const xTickProps = { angle: 0 as const, textAnchor: "middle" as const };
-  const isHorizontal = orientation === "horizontal" || (!!valueSuffix && valueSuffix.includes("%") && showActual && !showTarget && type === "bar");
+  const isHorizontal = orientation === "horizontal";
   const isPercentOnly = !!valueSuffix && valueSuffix.includes('%') && showActual && !showTarget && type === 'bar';
 
   // Wrapped tick renderer for long category names on horizontal (category Y-axis)
