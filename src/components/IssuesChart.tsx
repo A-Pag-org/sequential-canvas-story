@@ -175,7 +175,6 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
               <Bar dataKey="actualRaised" name="Actual Raised" fill="#555555" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
               </Bar>
@@ -188,21 +187,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          {/* Color legend for Actual Resolved thresholds */}
-          <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'> 90% Resolved'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'80% - 90% Resolved'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'< 80% Resolved'}</span>
-            </div>
-          </div>
+          
         </CardContent>
       </Card>
     );
@@ -236,7 +221,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 tickCount={6}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} verticalAlign="bottom" align="center" />
+              {/* Legend removed as per DSP HOME requirement */}
               <Bar
                 dataKey="raised"
                 name="Issues Raised"
