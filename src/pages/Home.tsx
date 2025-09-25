@@ -49,8 +49,8 @@ const resolutionRatesSorted = [...resolutionRates].sort((a, b) => b.raised - a.r
 const Home = () => {
   return (
     <div className="space-y-6">
-      {/* Summary Cards - DSP style: 3 cards in a single row on desktop */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Summary Cards - DSP style */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <IssueStatCard
           title="Actual Issues"
           target={totals.actualRaised}
@@ -60,6 +60,9 @@ const Home = () => {
           rightLabelText="Resolved"
           subtitle="(Average Resolution Rate)"
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MetricCard
           title="City with Highest Resolution Rate"
           value="Noida"
@@ -76,20 +79,25 @@ const Home = () => {
         />
       </div>
 
-      {/* Issues Status - Double Bar: Actual Raised vs Actual Resolved */}
+      {/* Issues Resolved Chart - Stacked with Line */}
       <IssuesChart
         title="Issue Status"
         data={resolvedChartData}
-        type="double"
+        type="stacked-line"
       />
 
       <IssuesChart
         title="Actual Resolution Rate by City"
-        data={resolutionRatesSorted}
+        data={resolutionRates}
         showTarget={false}
-        showLegend={true}
+        showLegend={false}
         valueSuffix="%"
-        orientation="horizontal"
+        getBarFill={(entry) => {
+          const v = Number((entry as any).raised) || 0;
+          if (v > 90) return "hsl(var(--success))";
+          if (v >= 80 && v <= 90) return "hsl(var(--warning))";
+          return "hsl(var(--danger))";
+        }}
       />
 
     </div>

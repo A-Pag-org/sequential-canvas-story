@@ -43,12 +43,6 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   const isHorizontal = orientation === "horizontal" || (!!valueSuffix && valueSuffix.includes("%") && showActual && !showTarget && type === "bar");
   const isPercentOnly = !!valueSuffix && valueSuffix.includes('%') && showActual && !showTarget && type === 'bar';
 
-  const getDspThresholdFill = (value: number) => {
-    if (value >= 90) return '#4CAF50'; // Satisfactory
-    if (value >= 50) return '#FFC107'; // Average
-    return '#F44336'; // Unsatisfactory
-  };
-
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
@@ -135,7 +129,9 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       const numerator = Number((entry as any).actualResolved) || 0;
       const denominator = Number((entry as any).actualRaised) || 0;
       const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
-      return getDspThresholdFill(pct);
+      if (pct > 90) return "#4CAF50"; // Green
+      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
+      return "#F44336"; // Red
     };
 
     const PercentLabel = (props: { x?: number; y?: number; width?: number; index?: number }) => {
@@ -147,7 +143,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       const pct = Math.round((resolved / raised) * 100);
       const posX = (x || 0) + (width || 0) / 2;
       const posY = (y || 0) + 14; // inside the bar, near the top
-      const fillColor = getDspThresholdFill(pct);
+      const fillColor = getResolvedFill((data[index] as TEntry));
       const textFill = fillColor === '#FFC107' ? '#111827' : '#ffffff';
       return (
         <text
@@ -191,19 +187,19 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          {/* DSP Color legend */}
+          {/* Color legend for Actual Resolved thresholds */}
           <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'Satisfactory (>= 90%)'}</span>
+              <span>{'> 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'Average (50% - 89%)'}</span>
+              <span>{'80% - 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'Unsatisfactory (< 50%)'}</span>
+              <span>{'< 80% Resolved'}</span>
             </div>
           </div>
         </CardContent>
@@ -303,7 +299,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
-          <ComposedChart data={data} layout={isHorizontal ? 'vertical' : 'horizontal'} margin={{ top: (isHorizontal ? 24 : (isMobile ? 56 : 40)), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isHorizontal ? 24 : (isMobile ? 64 : 56)) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+            <ComposedChart data={data} layout={isHorizontal ? 'vertical' : 'horizontal'} margin={{ top: (isHorizontal ? 24 : (isMobile ? 56 : 40)), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isHorizontal ? 24 : (isMobile ? 64 : 56)) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             {isHorizontal ? (
               <>
@@ -372,8 +368,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                 barSize={isMobile ? 20 : 28}
                 isAnimationActive={!isMobile}
               >
-                {(getBarFill || isPercentOnly) && data.map((entry, index) => (
-                  <Cell key={`cell-default-${index}`} fill={(getBarFill ? getBarFill(entry as TEntry, index) : getDspThresholdFill(Number((entry as any).raised) || 0))} />
+                {getBarFill && data.map((entry, index) => (
+                  <Cell key={`cell-default-${index}`} fill={getBarFill(entry as TEntry, index)} />
                 ))}
                 <LabelList dataKey="raised" position={isHorizontal ? "insideRight" : "top"} content={isHorizontal ? <BarInsideLabel /> : <BarValueLabel />} />
               </Bar>
@@ -384,15 +380,15 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'Satisfactory (>= 90%)'}</span>
+              <span>{'> 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'Average (50% - 89%)'}</span>
+              <span>{'80% - 90% Resolved'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'Unsatisfactory (< 50%)'}</span>
+              <span>{'< 80% Resolved'}</span>
             </div>
           </div>
         )}
