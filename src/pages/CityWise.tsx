@@ -149,16 +149,16 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
   if (activeModule === "DSP") {
     return (
       <div className="space-y-6">
-        {/* Summary Cards - keep original City Wise details, with embellishments */}
+        {/* Summary Cards - DSP specific KPI styling */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <MetricCard
             title="Onboarded Agencies"
             value="8"
-            variant="neutral"
+            variant="success"
             emphasizeValue
           />
           <MetricCard
-            title="In Active agency"
+            title="Inactive Agencies"
             value="3"
             variant="danger"
             emphasizeValue

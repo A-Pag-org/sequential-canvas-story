@@ -64,7 +64,17 @@ export const MetricCard = ({
                 )}
                 <div className="flex items-baseline gap-3">
                   {emphasizeValue ? (
-                    <span className="value-badge text-xl">{value}</span>
+                    <span
+                      className={cn(
+                        "value-badge text-xl",
+                        variant === "success" && "value-badge--success",
+                        variant === "danger" && "value-badge--danger",
+                        (variant === "neutral" || variant === "info" || variant === "warning" || variant === "primary") &&
+                          "value-badge--neutral"
+                      )}
+                    >
+                      {value}
+                    </span>
                   ) : (
                     <span className="text-3xl font-bold tracking-tight">{value}</span>
                   )}
