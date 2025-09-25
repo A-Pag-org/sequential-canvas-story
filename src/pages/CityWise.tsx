@@ -151,21 +151,18 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
         <MetricCard
           title="Onboarded Agencies"
           value="8"
-          subtitle="Issues raised Target Vs Actual : 92%"
           icon={Activity}
           variant="neutral"
         />
         <MetricCard
-          title="In Active agency"
-          value="3"
-          subtitle="Issue Resolved Target Vs Actual : 67%"
+          title="Active agency"
+          value="5"
           icon={Clock}
           variant="danger"
         />
         <MetricCard
           title="Top Performer"
           value="Municipal Corp"
-          subtitle="Avg. Issues Resolved Target Vs Actual : 96%"
           icon={TrendingUp}
           variant="success"
         />
