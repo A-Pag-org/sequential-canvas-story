@@ -1,7 +1,8 @@
 import { MetricCard } from "@/components/MetricCard";
+import { IssueStatCard } from "@/components/IssueStatCard";
 import { DataTable } from "@/components/DataTable";
 import { IssuesChart } from "@/components/IssuesChart";
-import { Activity, Clock, TrendingUp } from "lucide-react";
+import { Activity, Clock, TrendingUp, Trophy, ArrowDownCircle } from "lucide-react";
 
 interface CityWiseProps {
   activeModule: string;
@@ -139,6 +140,62 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
             { name: "Noida", target: 5000, raised: 3200 },
           ]}
           type="bar"
+        />
+      </div>
+    );
+  }
+
+  if (activeModule === "DSP") {
+    return (
+      <div className="space-y-6">
+        {/* Summary Cards - DSP design as per reference */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <IssueStatCard
+            title="Actual Issues"
+            target={197103}
+            actual={148232}
+            variant="resolved"
+            leftLabelText="Raised"
+            rightLabelText="Resolved"
+            subtitle="(Average Resolution Rate)"
+          />
+
+          <MetricCard
+            title="City with Highest Resolution Rate"
+            value="Noida"
+            subtitle="93%"
+            icon={Trophy}
+            variant="success"
+          />
+
+          <MetricCard
+            title="City with Lowest Resolution Rate"
+            value="Bahadurgarh"
+            subtitle="29%"
+            icon={ArrowDownCircle}
+            variant="danger"
+          />
+        </div>
+
+        {/* Issues Charts for Selected City (bar charts with all issue types visible) */}
+        <IssuesChart
+          title={`${selectedCity}: Issues Raised by Issue Type`}
+          data={chartData.map(d => ({ name: d.name, raised: d.raised }))}
+          type="bar"
+        />
+
+        <IssuesChart
+          title={`${selectedCity}: Issues Resolved by Issue Type`}
+          data={chartData.map(d => ({ name: d.name, raised: d.resolved }))}
+          type="bar"
+        />
+
+        {/* Agency Performance Table */}
+        <DataTable
+          title="Agency Performance Details"
+          columns={agencyColumns}
+          data={agencyTableData}
+          expandable={true}
         />
       </div>
     );
