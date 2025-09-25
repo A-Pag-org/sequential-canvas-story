@@ -347,8 +347,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                   fontWeight={600}
                   interval={0}
                   tick={<WrappedCategoryTick />}
-                  tickMargin={8}
-                  width={isMobile ? 144 : 220}
+                  tickMargin={12}
+                  width={isMobile ? 200 : 320}
                 />
               </>
             ) : (
