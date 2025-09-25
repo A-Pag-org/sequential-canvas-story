@@ -16,8 +16,10 @@ interface IssueStatCardProps {
 }
 
 const bgByVariant: Record<Variant, string> = {
-  raised: "bg-yellow-300 text-black",
-  resolved: "bg-[#555555] text-white",
+  // Warm amber for "Actual Issues" left card per reference
+  raised: "bg-warning text-warning-foreground",
+  // Elegant dark slate gradient for resolved summary
+  resolved: "bg-[hsl(0_0%_26%)] text-white",
 };
 
 export function IssueStatCard({ title, target, actual, variant, className, leftLabelText, rightLabelText, subtitle }: IssueStatCardProps) {

@@ -73,7 +73,8 @@
     --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 43%) 50%, hsl(38 92% 57%) 100%);
     --gradient-danger: linear-gradient(135deg, hsl(0 72% 51%) 0%, hsl(0 72% 44%) 50%, hsl(0 72% 58%) 100%);
     --gradient-info: linear-gradient(135deg, hsl(201 96% 32%) 0%, hsl(201 96% 25%) 50%, hsl(201 96% 39%) 100%);
-    --gradient-neutral: linear-gradient(135deg, hsl(210 20% 95%) 0%, hsl(210 20% 90%) 50%, hsl(210 20% 97%) 100%);
+    /* Neutral card updated to elegant dark slate to match reference */
+    --gradient-neutral: linear-gradient(135deg, hsl(0 0% 34%) 0%, hsl(0 0% 28%) 50%, hsl(0 0% 22%) 100%);
     
     /* Glass morphism and depth gradients */
     --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.05));
@@ -203,8 +204,8 @@
 
   .metric-card-neutral {
     background: var(--gradient-neutral);
-    @apply text-foreground shadow-lg;
-    box-shadow: 0 8px 32px hsl(var(--foreground) / 0.08);
+    @apply text-white shadow-lg;
+    box-shadow: 0 8px 32px hsl(0 0% 0% / 0.25);
   }
 
   .nav-button {
@@ -226,6 +227,23 @@
     background: var(--gradient-header);
     @apply text-primary-foreground sticky top-0 z-50;
     box-shadow: 0 8px 32px hsl(var(--primary) / 0.15);
+  }
+
+  /* Jony Ive-inspired city tabs for header - high contrast and clarity */
+  .city-tab {
+    @apply inline-flex items-center justify-center h-8 px-3 rounded-lg text-xs font-medium transition-all duration-300 border;
+    backdrop-filter: blur(8px);
+  }
+
+  .city-tab-inactive {
+    @apply text-white/85 bg-white/10 border-white/20 hover:bg-white/15 hover:text-white;
+    box-shadow: 0 2px 10px hsl(0 0% 0% / 0.15) inset, 0 1px 0 hsl(0 0% 100% / 0.08);
+  }
+
+  .city-tab-active {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground border-white/0 shadow-lg;
+    box-shadow: 0 8px 22px hsl(var(--primary) / 0.35), inset 0 1px 0 hsl(0 0% 100% / 0.35);
   }
 
   .chart-container {
