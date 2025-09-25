@@ -12,27 +12,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface TableColumn<TRow extends Record<string, unknown>> {
+interface TableColumn {
   key: string;
   label: string;
-  render?: (value: unknown, row: TRow) => React.ReactNode;
+  render?: (value: any, row: any) => React.ReactNode;
   headerClassName?: string;
   cellClassName?: string;
 }
 
-interface DataTableProps<TRow extends Record<string, unknown>> {
+interface DataTableProps {
   title?: string;
-  columns: TableColumn<TRow>[];
-  data: TRow[];
+  columns: TableColumn[];
+  data: any[];
   expandable?: boolean;
   onRowExpand?: (rowId: string | number) => void;
-  renderExpanded?: (row: TRow) => React.ReactNode;
+  renderExpanded?: (row: any) => React.ReactNode;
   eyeInCity?: boolean;
   eyeColumnKey?: string;
   singleExpand?: boolean;
 }
 
-export const DataTable = <TRow extends Record<string, unknown>>({
+export const DataTable = ({
   title,
   columns,
   data,
@@ -42,7 +42,7 @@ export const DataTable = <TRow extends Record<string, unknown>>({
   eyeInCity = false,
   eyeColumnKey,
   singleExpand = false,
-}: DataTableProps<TRow>) => {
+}: DataTableProps) => {
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
 
   const toggleRow = (rowId: string | number) => {
@@ -87,8 +87,7 @@ export const DataTable = <TRow extends Record<string, unknown>>({
           </TableHeader>
           <TableBody>
             {data.map((row, index) => {
-              const maybeId = (row as { id?: string | number }).id;
-              const rowId = maybeId ?? index;
+              const rowId = (row as any).id || index;
               const isExpanded = expandedRows.has(rowId);
               
               return (
@@ -123,7 +122,7 @@ export const DataTable = <TRow extends Record<string, unknown>>({
                     <TableCell key={column.key} className={cn("font-medium", column.cellClassName)}>
                       {eyeInCity && column.key === (eyeColumnKey || "city") ? (
                         <div className="flex items-center gap-2">
-                          <span>{(row as Record<string, unknown>)[column.key] as React.ReactNode || "-"}</span>
+                          <span>{row[column.key] || "-"}</span>
                           <Button
                             variant="ghost"
                             size="sm"
@@ -139,7 +138,7 @@ export const DataTable = <TRow extends Record<string, unknown>>({
                         // Gate selected columns until expanded when using eyeInCity
                         (eyeInCity && ["agency", "turnAroundTime", "fastestCity", "slowestCity", "avgTimeTaken"].includes(column.key) && !isExpanded)
                           ? <span>-</span>
-                          : (column.render ? column.render((row as Record<string, unknown>)[column.key], row) : <span>{(row as Record<string, unknown>)[column.key] as React.ReactNode || "-"}</span>)
+                          : (column.render ? column.render(row[column.key], row) : <span>{row[column.key] || "-"}</span>)
                       )}
                     </TableCell>
                   ))}

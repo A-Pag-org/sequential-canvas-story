@@ -107,18 +107,10 @@ export const DashboardHeader = ({
             {cities.map((city) => (
               <Button
                 key={city}
-                variant={activeModule === "DSP" ? "outline" : (selectedCity === city ? "default" : "outline")}
+                variant={selectedCity === city ? "default" : "outline"}
                 size="sm"
                 onClick={() => onCityChange(city)}
-                aria-pressed={selectedCity === city}
-                className={cn(
-                  "nav-button h-8 px-2 text-xs truncate",
-                  activeModule === "DSP"
-                    ? (selectedCity === city
-                        ? "bg-green-600 text-white hover:bg-green-700 border-green-600"
-                        : "")
-                    : ""
-                )}
+                className="nav-button h-8 px-2 text-xs truncate"
               >
                 {city}
               </Button>
