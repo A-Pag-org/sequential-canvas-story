@@ -7,7 +7,7 @@ interface MetricCardProps {
   value?: string | number;
   subtitle?: string;
   icon?: LucideIcon;
-  variant: "success" | "warning" | "danger" | "info" | "primary";
+  variant: "success" | "warning" | "danger" | "info" | "primary" | "neutral";
   trend?: {
     value: number;
     isPositive: boolean;
@@ -34,6 +34,7 @@ export const MetricCard = ({
     danger: "metric-card-danger",
     info: "metric-card-info",
     primary: "metric-card-primary",
+    neutral: "metric-card-neutral",
   };
 
   return (

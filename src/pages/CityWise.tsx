@@ -153,7 +153,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
           value="8"
           subtitle="Issues raised Target Vs Actual : 92%"
           icon={Activity}
-          variant="warning"
+          variant="neutral"
         />
         <MetricCard
           title="In Active agency"
@@ -167,7 +167,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
           value="Municipal Corp"
           subtitle="Avg. Issues Resolved Target Vs Actual : 96%"
           icon={TrendingUp}
-          variant="info"
+          variant="success"
         />
       </div>
 
