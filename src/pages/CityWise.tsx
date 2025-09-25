@@ -177,7 +177,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
           type="bar"
           showTarget={false}
           showActual={true}
-          orientation="horizontal"
+          orientation="vertical"
         />
 
         <IssuesChart

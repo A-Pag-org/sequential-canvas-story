@@ -39,8 +39,17 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
 
 export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical" }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
-  const xTickProps = { angle: 0 as const, textAnchor: "middle" as const };
   const isHorizontal = orientation === "horizontal";
+  const maxNameLength = Array.isArray(data) && data.length > 0
+    ? Math.max(...data.map((d) => (d?.name ? String(d.name).length : 0)))
+    : 0;
+  const requiresRotation = !isHorizontal && (
+    (isMobile && (maxNameLength > 10 || data.length > 6)) ||
+    (!isMobile && (maxNameLength > 16 || data.length > 8))
+  );
+  const xTickProps = requiresRotation
+    ? ({ angle: -35 as const, textAnchor: "end" as const })
+    : ({ angle: 0 as const, textAnchor: "middle" as const });
   const isPercentOnly = !!valueSuffix && valueSuffix.includes('%') && showActual && !showTarget && type === 'bar';
 
   // Wrapped tick renderer for long category names on horizontal (category Y-axis)
@@ -212,7 +221,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={isMobile ? 360 : 460}>
-            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (isMobile ? 64 : 56) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
+            <ComposedChart data={data} margin={{ top: (isMobile ? 56 : 40), right: (isMobile ? 16 : 30), left: (isMobile ? 12 : 20), bottom: (requiresRotation ? (isMobile ? 88 : 80) : (isMobile ? 64 : 56)) }} barCategoryGap={isMobile ? '35%' : '20%'} barGap={isMobile ? 2 : 4}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
@@ -360,7 +369,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                   fontWeight={500}
                   interval={0}
                   tick={xTickProps}
-                  tickMargin={isMobile ? 12 : 16}
+                  tickMargin={requiresRotation ? 6 : (isMobile ? 12 : 16)}
                 />
                 <YAxis
                     stroke="hsl(var(--muted-foreground))"
