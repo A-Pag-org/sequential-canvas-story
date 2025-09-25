@@ -153,14 +153,12 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <MetricCard
             title="Onboarded Agencies"
-            helperText="The number of road owning agencies that are being represented"
-            value={selectedCity === "Delhi" ? 12 : 8}
+            value="8"
             variant="neutral"
             emphasizeValue
           />
           <MetricCard
-            title="Active Agencies"
-            helperText="Agency resolving at least one issue in the month"
+            title="In Active agency"
             value="3"
             variant="danger"
             emphasizeValue
@@ -220,14 +218,12 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           title="Onboarded Agencies"
-          helperText="The number of road owning agencies that are being represented"
-          value={selectedCity === "Delhi" ? 12 : 8}
+          value="8"
           icon={Activity}
           variant="neutral"
         />
         <MetricCard
-          title="Active Agencies"
-          helperText="Agency resolving at least one issue in the month"
+          title="Active agency"
           value="5"
           icon={Clock}
           variant="danger"
