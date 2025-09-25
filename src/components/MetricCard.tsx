@@ -6,6 +6,7 @@ interface MetricCardProps {
   title: string;
   value?: string | number;
   subtitle?: string;
+  helperText?: string;
   icon?: LucideIcon;
   variant: "success" | "warning" | "danger" | "info" | "primary" | "neutral";
   trend?: {
@@ -22,6 +23,7 @@ export const MetricCard = ({
   title,
   value,
   subtitle,
+  helperText,
   icon: Icon,
   variant,
   trend,
@@ -56,7 +58,10 @@ export const MetricCard = ({
               </h3>
             ) : (
               <>
-                <h3 className="text-sm font-medium opacity-90 mb-3">{title}</h3>
+                <h3 className="text-sm font-medium opacity-90 mb-1">{title}</h3>
+                {helperText && (
+                  <p className="text-xs opacity-70 mb-2 leading-relaxed">{helperText}</p>
+                )}
                 <div className="flex items-baseline gap-3">
                   {emphasizeValue ? (
                     <span className="value-badge text-xl">{value}</span>
