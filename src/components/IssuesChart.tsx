@@ -43,6 +43,48 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   const isHorizontal = orientation === "horizontal" || (!!valueSuffix && valueSuffix.includes("%") && showActual && !showTarget && type === "bar");
   const isPercentOnly = !!valueSuffix && valueSuffix.includes('%') && showActual && !showTarget && type === 'bar';
 
+  // Wrapped tick renderer for long category names on horizontal (category Y-axis)
+  const WrappedCategoryTick = (props: { x?: number; y?: number; payload?: { value?: string } }) => {
+    const { x = 0, y = 0, payload } = props;
+    const rawText = String(payload?.value ?? "");
+    const maxCharsPerLine = isMobile ? 20 : 28;
+    const maxLines = 3;
+
+    const words = rawText.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+    for (const word of words) {
+      if ((currentLine + (currentLine ? " " : "") + word).length <= maxCharsPerLine) {
+        currentLine = currentLine ? `${currentLine} ${word}` : word;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+        if (lines.length === maxLines - 1) {
+          break;
+        }
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    if (lines.length > maxLines) {
+      lines.length = maxLines;
+    }
+    // Ellipsize if truncated
+    const isTruncated = words.join(" ") !== lines.join(" ");
+    if (isTruncated) {
+      const lastIdx = lines.length - 1;
+      lines[lastIdx] = lines[lastIdx].replace(/\s+$/, "").slice(0, Math.max(0, maxCharsPerLine - 1)) + "…";
+    }
+
+    const lineHeight = 14; // px
+    return (
+      <text x={x} y={y} fontSize={12} fontWeight={600} fill="hsl(var(--muted-foreground))" dominantBaseline="central">
+        {lines.map((line, idx) => (
+          <tspan key={idx} x={x} dy={idx === 0 ? 0 : lineHeight}>{line}</tspan>
+        ))}
+      </text>
+    );
+  };
+
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
@@ -302,10 +344,11 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
                   dataKey="name"
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
-                  fontWeight={500}
+                  fontWeight={600}
                   interval={0}
+                  tick={<WrappedCategoryTick />}
                   tickMargin={8}
-                  width={isMobile ? 112 : 196}
+                  width={isMobile ? 144 : 220}
                 />
               </>
             ) : (

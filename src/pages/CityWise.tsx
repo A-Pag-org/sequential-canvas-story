@@ -14,20 +14,21 @@ interface CityWiseProps {
 const cityData = {
   Delhi: {
     raised: [
-      { name: "Barren land to be greened", raised: 5620 },
-      { name: "Broken Footpath / Divider", raised: 7886 },
-      { name: "Burning of garbage, plastic, leaves, branches etc.", raised: 6793 },
-      { name: "Construction/ demolition activity without safeguards", raised: 9876 },
-      { name: "Encroachment-Building Materials Dumped on Road", raised: 7543 },
-      { name: "Garbage dumped on public land", raised: 4365 },
-      { name: "Malba, bricks, bori, etc dumped on public land", raised: 867 },
-      { name: "Overflowing Dustbins", raised: 987 },
       { name: "Pothole", raised: 432 },
-      { name: "Sand piled on roadsides + Mud/slit on roadside", raised: 410 },
       { name: "Unpaved Road", raised: 296 },
+      { name: "Broken Footpath / Divider", raised: 7886 },
+      { name: "Malba on public land", raised: 867 },
+      { name: "Garbage on public land", raised: 4365 },
+      { name: "Sand Pile/ Mud/Silt on roadside", raised: 410 },
+      { name: "C&D activity without safeguards", raised: 9876 },
+      { name: "Building Materials on Road", raised: 7543 },
+      { name: "Garbage, Plastic, Leaves Burning", raised: 6793 },
+      { name: "Overflowing Dustbins", raised: 987 },
+      { name: "Barren land to be greened", raised: 5620 },
+      { name: "Central Verges to be greened", raised: 1200 },
       { name: "Unsurfaced Parking Lots", raised: 188 },
     ],
-    resolved: [7, 7886, 1678, 2349, 801, 4365, 667, 21, 132, 54, 37, 23]
+    resolved: [132, 37, 7886, 667, 4365, 54, 2349, 801, 1678, 21, 7, 49, 23]
   }
 };
 
@@ -174,12 +175,18 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
           title={`${selectedCity}: Issues Raised by Issue Type`}
           data={chartData.map(d => ({ name: d.name, raised: d.raised }))}
           type="bar"
+          showTarget={false}
+          showActual={true}
+          orientation="horizontal"
         />
 
         <IssuesChart
           title={`${selectedCity}: Issues Resolved by Issue Type`}
           data={chartData.map(d => ({ name: d.name, raised: d.resolved }))}
           type="bar"
+          showTarget={false}
+          showActual={true}
+          orientation="horizontal"
         />
 
         {/* Agency Performance Table */}
