@@ -49,7 +49,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       let pct: number | undefined;
       if (type === "stacked-line" || type === "double") {
         const num = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
-        const den = payload.find((p) => p.dataKey === "actualRaised")?.payload?.actualRaised as number | undefined;
+        const denEntry = payload.find((p) => p.dataKey === "actualRaised");
+        const den = typeof denEntry?.payload?.actualRaised === 'number' ? denEntry.payload.actualRaised as number : undefined;
         if (typeof num === "number" && typeof den === "number" && den > 0) pct = Math.round((num / den) * 100);
       } else {
         const targetEntry = payload.find((p) => p.dataKey === 'target');
@@ -126,8 +127,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
 
   if (type === "double") {
     const getResolvedFill = (entry: TEntry) => {
-      const numerator = Number((entry as any).actualResolved) || 0;
-      const denominator = Number((entry as any).actualRaised) || 0;
+      const numerator = Number((entry as { actualResolved?: number }).actualResolved ?? 0) || 0;
+      const denominator = Number((entry as { actualRaised?: number }).actualRaised ?? 0) || 0;
       const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
       if (pct > 90) return "#4CAF50"; // Green
       if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
@@ -136,9 +137,9 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
 
     const PercentLabel = (props: { x?: number; y?: number; width?: number; index?: number }) => {
       const { x, y, width, index } = props;
-      const record = (index != null ? data[index] : undefined) as any;
-      const resolved = Number(record?.actualResolved) || 0;
-      const raised = Number(record?.actualRaised) || 0;
+      const record = (index != null ? data[index] : undefined) as Partial<ChartDataPoint> | undefined;
+      const resolved = Number(record?.actualResolved ?? 0) || 0;
+      const raised = Number(record?.actualRaised ?? 0) || 0;
       if (!raised) return null;
       const pct = Math.round((resolved / raised) * 100);
       const posX = (x || 0) + (width || 0) / 2;

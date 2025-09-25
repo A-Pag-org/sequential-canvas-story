@@ -50,7 +50,7 @@ const Home = () => {
   return (
     <div className="space-y-6">
       {/* Summary Cards - DSP style */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <IssueStatCard
           title="Actual Issues"
           target={totals.actualRaised}
@@ -60,9 +60,6 @@ const Home = () => {
           rightLabelText="Resolved"
           subtitle="(Average Resolution Rate)"
         />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MetricCard
           title="City with Highest Resolution Rate"
           value="Noida"
@@ -79,11 +76,11 @@ const Home = () => {
         />
       </div>
 
-      {/* Issues Resolved Chart - Stacked with Line */}
+      {/* Issues Status Chart - Double Bar */}
       <IssuesChart
         title="Issue Status"
         data={resolvedChartData}
-        type="stacked-line"
+        type="double"
       />
 
       <IssuesChart
@@ -93,7 +90,7 @@ const Home = () => {
         showLegend={false}
         valueSuffix="%"
         getBarFill={(entry) => {
-          const v = Number((entry as any).raised) || 0;
+          const v = Number(entry.raised ?? 0) || 0;
           if (v > 90) return "hsl(var(--success))";
           if (v >= 80 && v <= 90) return "hsl(var(--warning))";
           return "hsl(var(--danger))";
