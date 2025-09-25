@@ -2,7 +2,7 @@ import { MetricCard } from "@/components/MetricCard";
 import { IssueStatCard } from "@/components/IssueStatCard";
 import { DataTable } from "@/components/DataTable";
 import { IssuesChart } from "@/components/IssuesChart";
-import { Activity, Clock, TrendingUp, Trophy, ArrowDownCircle } from "lucide-react";
+import { Activity, Clock, TrendingUp } from "lucide-react";
 
 interface CityWiseProps {
   activeModule: string;
@@ -148,32 +148,22 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
   if (activeModule === "DSP") {
     return (
       <div className="space-y-6">
-        {/* Summary Cards - DSP design as per reference */}
+        {/* Summary Cards - keep original City Wise details, with embellishments */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <IssueStatCard
-            title="Actual Issues"
-            target={197103}
-            actual={148232}
-            variant="resolved"
-            leftLabelText="Raised"
-            rightLabelText="Resolved"
-            subtitle="(Average Resolution Rate)"
-          />
-
           <MetricCard
-            title="City with Highest Resolution Rate"
-            value="Noida"
-            subtitle="93%"
-            icon={Trophy}
-            variant="success"
+            title="Onboarded Agencies"
+            value="8"
+            variant="neutral"
           />
-
           <MetricCard
-            title="City with Lowest Resolution Rate"
-            value="Bahadurgarh"
-            subtitle="29%"
-            icon={ArrowDownCircle}
+            title="In Active agency"
+            value="3"
             variant="danger"
+          />
+          <MetricCard
+            title="Top Performer"
+            value="Municipal Corp"
+            variant="success"
           />
         </div>
 
