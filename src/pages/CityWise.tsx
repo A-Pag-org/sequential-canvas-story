@@ -154,11 +154,13 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
             title="Onboarded Agencies"
             value="8"
             variant="neutral"
+            emphasizeValue
           />
           <MetricCard
             title="In Active agency"
             value="3"
             variant="danger"
+            emphasizeValue
           />
           <MetricCard
             title="Top Performer"

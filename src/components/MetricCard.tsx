@@ -15,6 +15,7 @@ interface MetricCardProps {
   className?: string;
   headingOverride?: string;
   headingClassName?: string;
+  emphasizeValue?: boolean;
 }
 
 export const MetricCard = ({
@@ -27,6 +28,7 @@ export const MetricCard = ({
   className,
   headingOverride,
   headingClassName,
+  emphasizeValue,
 }: MetricCardProps) => {
   const variantClasses = {
     success: "metric-card-success",
@@ -56,7 +58,11 @@ export const MetricCard = ({
               <>
                 <h3 className="text-sm font-medium opacity-90 mb-3">{title}</h3>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-bold tracking-tight">{value}</span>
+                  {emphasizeValue ? (
+                    <span className="value-badge text-xl">{value}</span>
+                  ) : (
+                    <span className="text-3xl font-bold tracking-tight">{value}</span>
+                  )}
                   {trend && (
                     <span
                       className={cn(
