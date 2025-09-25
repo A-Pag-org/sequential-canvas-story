@@ -173,20 +173,32 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
         {/* Issues Charts for Selected City (bar charts with all issue types visible) */}
         <IssuesChart
           title={`${selectedCity}: Issues Raised by Issue Type`}
-          data={chartData.map(d => ({ name: d.name, raised: d.raised }))}
+          data={chartData.map(d => ({ name: d.name, raised: d.raised, actualRaised: d.raised, actualResolved: d.resolved }))}
           type="bar"
           showTarget={false}
           showActual={true}
           orientation="vertical"
+          showDSPResolutionLegend={true}
+          getBarFill={() => '#4A4A4A'}
         />
 
         <IssuesChart
           title={`${selectedCity}: Issues Resolved by Issue Type`}
-          data={chartData.map(d => ({ name: d.name, raised: d.resolved }))}
+          data={chartData.map(d => ({ name: d.name, raised: d.resolved, actualRaised: d.raised }))}
           type="bar"
           showTarget={false}
           showActual={true}
           orientation="horizontal"
+          showDSPResolutionLegend={true}
+          getBarFill={(entry) => {
+            const e: any = entry as any;
+            const den = Number(e?.actualRaised ?? 0) || 0;
+            const num = Number(e?.raised ?? 0) || 0;
+            const pct = den > 0 ? Math.round((num / den) * 100) : 0;
+            if (pct >= 90) return '#4CAF50';
+            if (pct >= 50) return '#FFC107';
+            return '#F44336';
+          }}
         />
 
         {/* Agency Performance Table */}
