@@ -103,14 +103,17 @@ export const DashboardHeader = ({
         </div>
 
         {activeSection === "city-wise" && (
-          <div className="grid grid-cols-8 gap-1 py-1 border-t border-white/10">
+          <div className="grid grid-cols-8 gap-2 py-2 border-t border-white/10">
             {cities.map((city) => (
               <Button
                 key={city}
-                variant={selectedCity === city ? "default" : "outline"}
+                variant="ghost"
                 size="sm"
                 onClick={() => onCityChange(city)}
-                className="nav-button h-8 px-2 text-xs truncate"
+                className={cn(
+                  "city-tab truncate",
+                  selectedCity === city ? "city-tab-active" : "city-tab-inactive",
+                )}
               >
                 {city}
               </Button>
