@@ -81,6 +81,7 @@ const Home = () => {
         title="Issue Status"
         data={resolvedChartData}
         type="double"
+        showDSPResolutionLegend={true}
       />
 
       <IssuesChart
@@ -89,11 +90,12 @@ const Home = () => {
         showTarget={false}
         showLegend={false}
         valueSuffix="%"
+        showDSPResolutionLegend={true}
         getBarFill={(entry) => {
           const v = Number(entry.raised ?? 0) || 0;
-          if (v > 90) return "hsl(var(--success))";
-          if (v >= 80 && v <= 90) return "hsl(var(--warning))";
-          return "hsl(var(--danger))";
+          if (v >= 90) return "#4CAF50";
+          if (v >= 50) return "#FFC107";
+          return "#F44336";
         }}
       />
 

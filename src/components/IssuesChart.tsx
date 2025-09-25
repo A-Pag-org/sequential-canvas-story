@@ -35,9 +35,11 @@ interface IssuesChartProps<TEntry extends ChartDataPoint = ChartDataPoint> {
   showPercentOfTarget?: boolean;
   getBarFill?: (entry: TEntry, index: number) => string;
   orientation?: "vertical" | "horizontal";
+  showDSPResolutionLegend?: boolean;
+  tooltipPrefix?: string;
 }
 
-export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical" }: IssuesChartProps<TEntry>) => {
+export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ title, data, type = "bar", showTarget = true, showActual = true, valueSuffix, showLegend = true, showPercentOfTarget = false, getBarFill, orientation = "vertical", showDSPResolutionLegend = false, tooltipPrefix }: IssuesChartProps<TEntry>) => {
   const isMobile = useIsMobile();
   const isHorizontal = orientation === "horizontal";
   const maxNameLength = Array.isArray(data) && data.length > 0
@@ -97,21 +99,39 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
   type TooltipEntry = { name: string; value: number; color: string; dataKey: string; payload: TEntry };
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
-      let pct: number | undefined;
-      if (type === "stacked-line" || type === "double") {
-        const num = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
-        const denEntry = payload.find((p) => p.dataKey === "actualRaised");
-        const den = typeof denEntry?.payload?.actualRaised === 'number' ? denEntry.payload.actualRaised as number : undefined;
-        if (typeof num === "number" && typeof den === "number" && den > 0) pct = Math.round((num / den) * 100);
-      } else {
-        const targetEntry = payload.find((p) => p.dataKey === 'target');
-        const actualEntry = payload.find((p) => p.dataKey === 'raised');
-        const targetVal = targetEntry?.value as number | undefined;
-        const actualVal = actualEntry?.value as number | undefined;
-        pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
-          ? Math.round((actualVal / targetVal) * 100)
-          : undefined;
+      // Specialized tooltip for grouped raised vs resolved bars
+      if (type === "double") {
+        const resolvedVal = payload.find((p) => p.dataKey === "actualResolved")?.value as number | undefined;
+        const raisedVal = payload.find((p) => p.dataKey === "actualRaised")?.value as number | undefined;
+        const raised = typeof raisedVal === 'number' ? raisedVal : 0;
+        const resolved = typeof resolvedVal === 'number' ? resolvedVal : 0;
+        let pctNum = 0;
+        if (raised > 0) pctNum = Math.round((resolved / raised) * 100);
+        let status: string = "Unsatisfactory";
+        if (raised === 0) {
+          status = "No issues raised";
+        } else if (pctNum >= 90) {
+          status = "Satisfactory";
+        } else if (pctNum >= 50) {
+          status = "Average";
+        }
+        return (
+          <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+            <p className="font-medium mb-2">{tooltipPrefix ? `${tooltipPrefix}/${label}` : label}</p>
+            <p className="text-sm">{`Raised: ${raised.toLocaleString()} | Resolved: ${resolved.toLocaleString()}${raised > 0 ? ` (${pctNum}%)` : ""} | Status: ${status}`}</p>
+          </div>
+        );
       }
+
+      // Default tooltip behavior
+      let pct: number | undefined;
+      const targetEntry = payload.find((p) => p.dataKey === 'target');
+      const actualEntry = payload.find((p) => p.dataKey === 'raised');
+      const targetVal = targetEntry?.value as number | undefined;
+      const actualVal = actualEntry?.value as number | undefined;
+      pct = showPercentOfTarget && showTarget && showActual && typeof targetVal === 'number' && targetVal > 0 && typeof actualVal === 'number'
+        ? Math.round((actualVal / targetVal) * 100)
+        : undefined;
 
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
@@ -119,7 +139,7 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
               {entry.name}: {entry.value.toLocaleString()}{valueSuffix ?? ""}
-              {pct != null && entry.dataKey === 'actualResolved' ? ` (${pct}%)` : ""}
+              {pct != null && entry.dataKey === 'raised' ? ` (${pct}%)` : ""}
             </p>
           ))}
         </div>
@@ -168,7 +188,6 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
         fill={isInside ? "#ffffff" : "hsl(var(--foreground))"}
         stroke={isInside ? "#000000" : "none"}
         strokeWidth={isInside ? 0.6 : 0}
-        style={isInside ? ({ paintOrder: 'stroke' as const }) : undefined}
       >
         {label}
       </text>
@@ -180,23 +199,28 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
     const getResolvedFill = (entry: TEntry) => {
       const numerator = Number((entry as { actualResolved?: number }).actualResolved ?? 0) || 0;
       const denominator = Number((entry as { actualRaised?: number }).actualRaised ?? 0) || 0;
-      const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
-      if (pct > 90) return "#4CAF50"; // Green
-      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
-      return "#F44336"; // Red
+      if (denominator === 0) return "#9E9E9E"; // No issues raised
+      const pct = (numerator / denominator) * 100;
+      if (pct >= 90) return "#4CAF50"; // Green (Satisfactory)
+      if (pct >= 50) return "#FFC107"; // Amber (Average)
+      return "#F44336"; // Red (Unsatisfactory)
     };
 
-    const PercentLabel = (props: { x?: number; y?: number; width?: number; index?: number }) => {
-      const { x, y, width, index } = props;
-      const record = (index != null ? data[index] : undefined) as Partial<ChartDataPoint> | undefined;
+    const ResolvedCombinedLabel = (props: { x?: number; y?: number; width?: number; height?: number; index?: number }) => {
+      const { x = 0, y = 0, width = 0, height = 0, index } = props;
+      if (index == null) return null;
+      const record = data[index] as Partial<ChartDataPoint>;
       const resolved = Number(record?.actualResolved ?? 0) || 0;
       const raised = Number(record?.actualRaised ?? 0) || 0;
-      if (!raised) return null;
-      const pct = Math.round((resolved / raised) * 100);
-      const posX = (x || 0) + (width || 0) / 2;
-      const posY = (y || 0) + 14; // inside the bar, near the top
-      const fillColor = getResolvedFill((data[index] as TEntry));
-      const textFill = fillColor === '#FFC107' ? '#111827' : '#ffffff';
+      const hasNoIssues = raised === 0;
+      const pct = hasNoIssues ? undefined : Math.round((resolved / raised) * 100);
+      const fillColor = getResolvedFill(data[index] as TEntry);
+      const isAmber = fillColor === "#FFC107";
+      const isInside = height >= 26; // threshold to keep text inside the filled bar
+      const posX = x + width / 2;
+      const posY = isInside ? (y + Math.min(height - 6, 16)) : (y - 8);
+      const labelText = hasNoIssues ? "No issues raised" : `${resolved.toLocaleString()} (${pct}%)`;
+      const textFill = isAmber ? "#111827" : "#ffffff";
       return (
         <text
           x={posX}
@@ -204,12 +228,11 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
           textAnchor="middle"
           fontSize={12}
           fontWeight={700}
-          fill={textFill}
-          stroke="#000000"
-          strokeWidth={0.6}
-          style={{ paintOrder: 'stroke' as const }}
+          fill={isInside ? (hasNoIssues ? "#111827" : textFill) : "hsl(var(--foreground))"}
+          stroke={isInside && !isAmber && !hasNoIssues ? "#000000" : "none"}
+          strokeWidth={isInside && !isAmber && !hasNoIssues ? 0.6 : 0}
         >
-          {pct}%
+          {labelText}
         </text>
       );
     };
@@ -226,19 +249,25 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} interval={0} tick={xTickProps} tickMargin={isMobile ? 12 : 16} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} fontWeight={500} domain={[0, 'dataMax + 10']} tickCount={6} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="actualRaised" name="Actual Raised" fill="#555555" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+              <Bar dataKey="actualRaised" name="Issues Raised" fill="#4A4A4A" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 <LabelList dataKey="actualRaised" position="top" content={<BarValueLabel />} />
               </Bar>
-              <Bar dataKey="actualResolved" name="Actual Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
+              <Bar dataKey="actualResolved" name="Issues Resolved" radius={[6, 6, 0, 0]} barSize={isMobile ? 20 : 28} isAnimationActive={!isMobile}>
                 {data.map((entry, index) => (
                   <Cell key={`cell-double-${index}`} fill={getResolvedFill(entry as TEntry)} />
                 ))}
-                <LabelList dataKey="actualResolved" position="top" content={<BarValueLabel />} />
-                <LabelList dataKey="actualResolved" position="top" content={<PercentLabel />} />
+                <LabelList dataKey="actualResolved" position="insideTop" content={<ResolvedCombinedLabel />} />
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          
+          {showDSPResolutionLegend && (
+            <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4A4A4A' }} /><span>Issues Raised</span></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} /><span>Satisfactory (≥90%)</span></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} /><span>Average (50–89%)</span></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} /><span>{'Unsatisfactory (<50%)'}</span></div>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -414,20 +443,19 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
             )}
           </ComposedChart>
         </ResponsiveContainer>
-        {isPercentOnly && (
+        {showDSPResolutionLegend && (
           <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
-              <span>{'> 90% Resolved'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
-              <span>{'80% - 90% Resolved'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
-              <span>{'< 80% Resolved'}</span>
-            </div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4A4A4A' }} /><span>Issues Raised</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} /><span>Satisfactory (≥90%)</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} /><span>Average (50–89%)</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} /><span>{'Unsatisfactory (<50%)'}</span></div>
+          </div>
+        )}
+        {!showDSPResolutionLegend && isPercentOnly && (
+          <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} /><span>{'≥ 90% Resolved'}</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} /><span>{'50% - 89% Resolved'}</span></div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} /><span>{'< 50% Resolved'}</span></div>
           </div>
         )}
       </CardContent>
