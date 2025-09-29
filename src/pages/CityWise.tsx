@@ -34,6 +34,14 @@ const cityData = {
 
 type AgencyRow = { id: number; agency: string; issuesRaised: number; issueResolved: number };
 
+type Column = {
+  key: string;
+  label: string;
+  render?: (value: any, row: any) => any;
+  headerClassName?: string;
+  cellClassName?: string;
+};
+
 const agenciesByCity: Record<string, AgencyRow[]> = {
   Delhi: [
     { id: 1, agency: "CPWD", issuesRaised: 820, issueResolved: 710 },
@@ -81,7 +89,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
 
   const agencyTableData: AgencyRow[] = agenciesByCity[selectedCity] || [];
 
-  const agencyColumns = [
+  const agencyColumns: Column[] = [
     {
       key: "srNo",
       label: "Sr.No.",
@@ -180,12 +188,27 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
         />
 
         {/* Agency Performance Table */}
-        <DataTable
-          title="Agency Performance Details"
-          columns={agencyColumns}
-          data={agencyTableData}
-          expandable={true}
-        />
+        {(() => {
+          const isDelhi = selectedCity === "Delhi";
+          const stickyHeaderClasses = "sticky top-0 z-10 bg-muted/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40";
+          const dspColumns = isDelhi
+            ? agencyColumns.map((col) => ({
+                ...col,
+                headerClassName: `${col.headerClassName ? col.headerClassName + " " : ""}${stickyHeaderClasses}`,
+              }))
+            : agencyColumns;
+
+          return (
+            <div className={isDelhi ? "max-h-96 overflow-y-auto" : ""}>
+              <DataTable
+                title="Agency Performance Details"
+                columns={dspColumns}
+                data={agencyTableData}
+                expandable={true}
+              />
+            </div>
+          );
+        })()}
       </div>
     );
   }
