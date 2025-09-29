@@ -12,8 +12,8 @@ interface DashboardHeaderProps {
 
 const modules = [
   { id: "DSP", label: "DSP" },
-  { id: "MRS", label: "MRS" },
   { id: "C&D", label: "C&D" },
+  { id: "MRS", label: "MRS" },
 ];
 
 const defaultSections = [
