@@ -168,7 +168,7 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
           />
           <MetricCard
             title="Active agencies"
-            value="3"
+          value="9"
             variant="danger"
             helperText="Agency resolving atleast one issue in the month"
             emphasizeValue
