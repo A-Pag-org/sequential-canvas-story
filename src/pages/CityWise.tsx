@@ -189,17 +189,14 @@ const CityWise = ({ activeModule, selectedCity }: CityWiseProps) => {
 
         {/* Agency Performance Table */}
         {(() => {
-          const isDelhi = selectedCity === "Delhi";
           const stickyHeaderClasses = "sticky top-0 z-10 bg-muted/60 backdrop-blur supports-[backdrop-filter]:bg-muted/40";
-          const dspColumns = isDelhi
-            ? agencyColumns.map((col) => ({
-                ...col,
-                headerClassName: `${col.headerClassName ? col.headerClassName + " " : ""}${stickyHeaderClasses}`,
-              }))
-            : agencyColumns;
+          const dspColumns = agencyColumns.map((col) => ({
+            ...col,
+            headerClassName: `${col.headerClassName ? col.headerClassName + " " : ""}${stickyHeaderClasses}`,
+          }));
 
           return (
-            <div className={isDelhi ? "max-h-96 overflow-y-auto" : ""}>
+            <div className="max-h-96 overflow-y-auto">
               <DataTable
                 title="Agency Performance Details"
                 columns={dspColumns}
