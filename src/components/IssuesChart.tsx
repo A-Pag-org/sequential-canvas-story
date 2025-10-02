@@ -181,8 +181,8 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
       const numerator = Number((entry as { actualResolved?: number }).actualResolved ?? 0) || 0;
       const denominator = Number((entry as { actualRaised?: number }).actualRaised ?? 0) || 0;
       const pct = denominator > 0 ? (numerator / denominator) * 100 : 0;
-      if (pct > 90) return "#4CAF50"; // Green
-      if (pct >= 80 && pct <= 90) return "#FFC107"; // Amber
+      if (pct >= 90) return "#4CAF50"; // Green (Satisfactory)
+      if (pct >= 50 && pct < 90) return "#FFC107"; // Amber (Average)
       return "#F44336"; // Red
     };
 
@@ -238,7 +238,20 @@ export const IssuesChart = <TEntry extends ChartDataPoint = ChartDataPoint>({ ti
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          
+          <div className="mt-3 flex w-full items-center justify-center gap-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#4CAF50' }} />
+              <span>{'Satisfactory - \u2265 90%'} </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#FFC107' }} />
+              <span>{'Average - 50% - 89%'} </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: '#F44336' }} />
+              <span>{'Unsatisfactory - < 50%'} </span>
+            </div>
+          </div>
         </CardContent>
       </Card>
     );
